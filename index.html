@@ -153,7 +153,7 @@
 </div>
 
 <footer>
-  <p><b>Live GMP:</b> figures are pulled from a <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">gmp.json</code> file that a scheduled job refreshes every few hours, sourced from ipoji.com.
+  <p><b>Live GMP:</b> figures are pulled from a <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">gmp.json</code> file that a scheduled job refreshes every few hours, sourced from ipowatch.in.
   Press <b>Refresh GMP</b> to re-read the latest. Open this page from your GitHub Pages URL (not the local file) for live data.</p>
   <p><b>GMP is unofficial</b> grey-market data — a rough sentiment signal, not a forecast, and sources disagree. Application amounts are 1 lot at the upper band (cut-off). None of this is financial advice.</p>
 </footer>
@@ -310,7 +310,7 @@ async function loadLive(manual){
       else { row.gmp = it.gmp_pct + "%"; row.rup = (it.gmp_rupees!=null)?it.gmp_rupees:null; n++; }
     });
     const when = j.source_stamp || (j.generated_at ? fmtWhen(j.generated_at) : "just now");
-    setLive("ok", `Live GMP · <b>${when}</b> · ${n} quotes · source ipoji.com`);
+    setLive("ok", `Live GMP · <b>${when}</b> · ${n} quotes · source ipowatch.in`);
     render();
   }catch(e){
     setLive("off", `Showing saved snapshot — live file not reachable`);

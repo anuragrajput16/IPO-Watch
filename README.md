@@ -1,7 +1,7 @@
 # IPO Watch — auto-refreshing GMP tracker
 
 A single-page IPO dashboard whose grey-market-premium (GMP) numbers refresh
-automatically. A scheduled GitHub Action scrapes GMP from ipoji.com every few
+automatically. A scheduled GitHub Action scrapes GMP from ipowatch.in every few
 hours, writes `gmp.json`, and your page reads it. A **Refresh GMP** button
 re-reads the latest at any time.
 
@@ -30,7 +30,7 @@ re-reads the latest at any time.
    **Open the page from that URL** (not the local file) so live data loads.
 4. **Enable Actions.** Repo → **Actions** tab → if prompted, **enable workflows**.
    Open **Update IPO GMP** → **Run workflow** to test it once. It should finish
-   in ~2 minutes and (if GMP changed) commit an updated `gmp.json`.
+   in under a minute and (if GMP changed) commit an updated `gmp.json`.
 
 That's it. From now on the data refreshes on its own; the button pulls the newest.
 
@@ -45,7 +45,7 @@ nothing to bill. A GMP tracker has no secrets, so public is fine.
 If you prefer a **Private** repo, you get **2,000 free Actions minutes/month**.
 This project uses roughly:
 
-> 8 runs/day × ~2 min/run × 30 days ≈ **~480 min/month** — about a quarter of the free quota.
+> 8 runs/day × ~1 min/run × 30 days ≈ **~240 min/month** — about a tenth of the free quota.
 
 To be certain private usage can never cost money, do both of these once:
 
@@ -58,7 +58,7 @@ To be certain private usage can never cost money, do both of these once:
 
 Extra guards already built into the workflow:
 
-- `timeout-minutes: 6` — no single run can burn more than 6 minutes, even if the
+- `timeout-minutes: 3` — no single run can burn more than 3 minutes, even if the
   site hangs.
 - `concurrency … cancel-in-progress` — two runs never overlap.
 - Runs only **8×/day**. Want fewer? Edit the `cron` line (examples are in the file).

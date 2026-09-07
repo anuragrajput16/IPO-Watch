@@ -1,21 +1,73 @@
 {
-  "source": "https://www.ipoji.com/ipo-gmp",
-  "source_stamp": "7 Sep 2026, 9:30 AM IST",
-  "generated_at": "2026-09-07T04:00:00Z",
-  "note": "GMP is unofficial grey-market data. Seed snapshot; refreshed by GitHub Actions.",
+  "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
+  "source_stamp": "7 Sept, 07:05",
+  "generated_at": "2026-09-07T08:17:27Z",
+  "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
-    {"name": "Pranav Constructions",  "gmp_pct": 29, "gmp_rupees": 36},
-    {"name": "Kanohar Electricals",   "gmp_pct": 30, "gmp_rupees": 190},
-    {"name": "Prasol Chemicals",      "gmp_pct": 16, "gmp_rupees": 110},
-    {"name": "Glass Wall Systems",    "gmp_pct": 18, "gmp_rupees": 32},
-    {"name": "Rentomojo",             "gmp_pct": 35, "gmp_rupees": 140},
-    {"name": "Karamtara Engineering", "gmp_pct": 20, "gmp_rupees": 50},
-    {"name": "LCC Projects",          "gmp_pct": 15, "gmp_rupees": 22},
-    {"name": "Asset Reconstruction",  "gmp_pct": null, "gmp_rupees": null},
-    {"name": "Manipal Payment",       "gmp_pct": 7,  "gmp_rupees": 25},
-    {"name": "Steamhouse India",      "gmp_pct": null, "gmp_rupees": null},
-    {"name": "Veegaland Developers",  "gmp_pct": 17, "gmp_rupees": 24},
-    {"name": "Manika Plastech",       "gmp_pct": null, "gmp_rupees": null},
-    {"name": "NSE",                   "gmp_pct": null, "gmp_rupees": null}
+    {
+      "name": "Pranav Constructions",
+      "gmp_pct": 35.48,
+      "gmp_rupees": 44
+    },
+    {
+      "name": "Kanohar Electricals",
+      "gmp_pct": 32.44,
+      "gmp_rupees": 205
+    },
+    {
+      "name": "Prasol Chemicals",
+      "gmp_pct": 17.75,
+      "gmp_rupees": 120
+    },
+    {
+      "name": "Glass Wall Systems",
+      "gmp_pct": 19.23,
+      "gmp_rupees": 35
+    },
+    {
+      "name": "Rentomojo",
+      "gmp_pct": 36.88,
+      "gmp_rupees": 149
+    },
+    {
+      "name": "Karamtara Engineering",
+      "gmp_pct": 21.65,
+      "gmp_rupees": 55
+    },
+    {
+      "name": "LCC Projects",
+      "gmp_pct": 17.12,
+      "gmp_rupees": 25
+    },
+    {
+      "name": "Asset Reconstruction",
+      "gmp_pct": null,
+      "gmp_rupees": 0
+    },
+    {
+      "name": "Manipal Payment",
+      "gmp_pct": 8.55,
+      "gmp_rupees": 30
+    },
+    {
+      "name": "Steamhouse India",
+      "gmp_pct": null,
+      "gmp_rupees": 0
+    },
+    {
+      "name": "Veegaland Developers",
+      "gmp_pct": 21.43,
+      "gmp_rupees": 30
+    },
+    {
+      "name": "Manika Plastech",
+      "gmp_pct": null,
+      "gmp_rupees": 0
+    },
+    {
+      "name": "NSE",
+      "gmp_pct": null,
+      "gmp_rupees": 285
+    }
   ]
 }

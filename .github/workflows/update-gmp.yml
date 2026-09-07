@@ -24,9 +24,9 @@ jobs:
   update:
     runs-on: ubuntu-latest
     # ── SAFETY CAP ──────────────────────────────────────────────
-    # Hard stop: no single run can burn more than 6 minutes of quota,
+    # Hard stop: no single run can burn more than 3 minutes of quota,
     # even if the site hangs. This is your "don't get into trouble" guard.
-    timeout-minutes: 6
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
 
@@ -35,9 +35,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: |
-          pip install --quiet beautifulsoup4 playwright
-          python -m playwright install --with-deps chromium
+        run: pip install --quiet requests
 
       - name: Scrape GMP
         run: python scripts/scrape_gmp.py
