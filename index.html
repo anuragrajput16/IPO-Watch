@@ -69,8 +69,9 @@
   .batch .bt{margin-left:auto; color:var(--muted); font-size:12px}
   .batch .bt b{color:var(--text); font-weight:700}
 
-  table{width:100%; border-collapse:collapse; background:var(--card);
-        border:1px solid var(--line); border-radius:12px; overflow:hidden}
+  .tablewrap{overflow-x:auto; border-radius:12px}
+  table{width:100%; min-width:640px; border-collapse:collapse; background:var(--card);
+        border:1px solid var(--line); border-radius:12px}
   thead th{background:#F0F2F6; color:#4A5160; font-size:11px; font-weight:700;
            text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); white-space:nowrap}
   thead th.r{text-align:right} thead th.c{text-align:center}
@@ -99,6 +100,15 @@
   .edit{cursor:text; border-bottom:1px dashed transparent; border-radius:3px; padding:1px 3px}
   .edit:hover{border-bottom-color:var(--line-strong); background:#F3F5FA}
   .edit:focus{outline:2px solid var(--accent); background:#fff}
+
+  .alloc-cell{display:flex; flex-direction:column; align-items:flex-start; gap:3px}
+  .alloc-link{font-size:11px; color:var(--accent); text-decoration:none; white-space:nowrap}
+  .alloc-link:hover{text-decoration:underline}
+  .alloc-select{border:1px solid transparent; border-radius:999px; font-size:11.5px;
+        font-weight:700; padding:3px 9px; cursor:pointer; font-family:inherit}
+  .alloc-select.v-go{background:var(--go-soft); color:var(--go)}
+  .alloc-select.v-wait{background:var(--wait-soft); color:var(--wait)}
+  .alloc-select.v-stop{background:var(--stop-soft); color:var(--stop)}
 
   footer{max-width:1180px; margin:0 auto; padding:0 22px 40px; color:var(--muted);
          font-size:11.5px; line-height:1.6}
@@ -188,6 +198,7 @@
   </div>
 
   <div id="table-host"></div>
+  <div id="history-host"></div>
 </div>
 
 <footer>
@@ -200,20 +211,41 @@
 const GMP_URL = "gmp.json";
 
 const DEFAULTS = [
-  {b:"7–9 Sep",   n:"Pranav Constructions",  gmp:"29%",  rup:36,  band:"₹118–124", app:14880, quota:"45%", f:4, v:4, l:5, view:"Apply",          vc:"go"},
-  {b:"8–10 Sep",  n:"Kanohar Electricals",   gmp:"30%",  rup:190, band:"₹601–632", app:14536, quota:"35%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
-  {b:"8–10 Sep",  n:"Prasol Chemicals",      gmp:"16%",  rup:110, band:"₹643–676", app:14872, quota:"35%", f:4, v:3, l:4, view:"Cautious Apply", vc:"wait"},
-  {b:"8–10 Sep",  n:"Glass Wall Systems",    gmp:"18%",  rup:32,  band:"₹172–182", app:14924, quota:"35%", f:4, v:2, l:3, view:"Skip",           vc:"wait"},
-  {b:"9–11 Sep",  n:"Rentomojo",             gmp:"35%",  rup:140, band:"₹384–404", app:14948, quota:"10%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
-  {b:"9–11 Sep",  n:"Karamtara Engineering", gmp:"20%",  rup:50,  band:"₹241–254", app:14986, quota:"35%", f:5, v:4, l:4, view:"Strong Apply",   vc:"go"},
-  {b:"9–11 Sep",  n:"LCC Projects",          gmp:"15%",  rup:22,  band:"₹139–146", app:14892, quota:"35%", f:5, v:4, l:4, view:"Apply",          vc:"go"},
-  {b:"9–11 Sep",  n:"Asset Reconstruction",  gmp:"TBD",  rup:null,band:"₹132–139", app:14873, quota:"35%", f:5, v:4, l:2, view:"Long-term",      vc:"wait"},
-  {b:"9–11 Sep",  n:"Manipal Payment",       gmp:"7%",   rup:25,  band:"₹322–339", app:14916, quota:"35%", f:-1,v:-1,l:3, view:"Wait",           vc:"wait"},
-  {b:"9–11 Sep",  n:"Steamhouse India",      gmp:"TBD",  rup:null,band:"₹77–81",   app:14900, quota:"35%", f:3, v:-1,l:2, view:"Skip",           vc:"stop"},
-  {b:"10–15 Sep", n:"Veegaland Developers",  gmp:"17%",  rup:24,  band:"₹130–140", app:14980, quota:"35%", f:4, v:3, l:4, view:"Watch",          vc:"wait"},
-  {b:"11–16 Sep", n:"Manika Plastech",       gmp:"TBD",  rup:null,band:"₹40–43",   app:0,     quota:"35%", f:3, v:-1,l:2, view:"Wait",           vc:"wait"},
-  {b:"21–23 Sep", n:"NSE",                   gmp:"TBD",  rup:null,band:"TBD",      app:0,     quota:"TBD", f:5, v:-1,l:5, view:"WAIT",           vc:"wait"},
+  {b:"7–9 Sep",   n:"Pranav Constructions",  gmp:"29%",  rup:36,  band:"₹118–124", app:14880, quota:"45%", f:4, v:4, l:5, view:"Apply",          vc:"go",   alloc:null},
+  {b:"8–10 Sep",  n:"Kanohar Electricals",   gmp:"30%",  rup:190, band:"₹601–632", app:14536, quota:"35%", f:5, v:3, l:5, view:"Apply",          vc:"go",   alloc:null},
+  {b:"8–10 Sep",  n:"Prasol Chemicals",      gmp:"16%",  rup:110, band:"₹643–676", app:14872, quota:"35%", f:4, v:3, l:4, view:"Cautious Apply", vc:"wait", alloc:null},
+  {b:"8–10 Sep",  n:"Glass Wall Systems",    gmp:"18%",  rup:32,  band:"₹172–182", app:14924, quota:"35%", f:4, v:2, l:3, view:"Skip",           vc:"wait", alloc:null},
+  {b:"9–11 Sep",  n:"Rentomojo",             gmp:"35%",  rup:140, band:"₹384–404", app:14948, quota:"10%", f:5, v:3, l:5, view:"Apply",          vc:"go",   alloc:null},
+  {b:"9–11 Sep",  n:"Karamtara Engineering", gmp:"20%",  rup:50,  band:"₹241–254", app:14986, quota:"35%", f:5, v:4, l:4, view:"Strong Apply",   vc:"go",   alloc:null},
+  {b:"9–11 Sep",  n:"LCC Projects",          gmp:"15%",  rup:22,  band:"₹139–146", app:14892, quota:"35%", f:5, v:4, l:4, view:"Apply",          vc:"go",   alloc:null},
+  {b:"9–11 Sep",  n:"Asset Reconstruction",  gmp:"TBD",  rup:null,band:"₹132–139", app:14873, quota:"35%", f:5, v:4, l:2, view:"Long-term",      vc:"wait", alloc:null},
+  {b:"9–11 Sep",  n:"Manipal Payment",       gmp:"7%",   rup:25,  band:"₹322–339", app:14916, quota:"35%", f:-1,v:-1,l:3, view:"Wait",           vc:"wait", alloc:null},
+  {b:"9–11 Sep",  n:"Steamhouse India",      gmp:"TBD",  rup:null,band:"₹77–81",   app:14900, quota:"35%", f:3, v:-1,l:2, view:"Skip",           vc:"stop", alloc:null},
+  {b:"10–15 Sep", n:"Veegaland Developers",  gmp:"17%",  rup:24,  band:"₹130–140", app:14980, quota:"35%", f:4, v:3, l:4, view:"Watch",          vc:"wait", alloc:null},
+  {b:"11–16 Sep", n:"Manika Plastech",       gmp:"TBD",  rup:null,band:"₹40–43",   app:0,     quota:"35%", f:3, v:-1,l:2, view:"Wait",           vc:"wait", alloc:null},
+  {b:"21–23 Sep", n:"NSE",                   gmp:"TBD",  rup:null,band:"TBD",      app:0,     quota:"TBD", f:5, v:-1,l:5, view:"WAIT",           vc:"wait", alloc:null},
 ];
+
+// Registrar handling each IPO's allotment — from each company's IPO detail
+// page (registrar contact block). url is the registrar's own generic
+// "check status" tool: select your IPO there, then enter PAN.
+const KFIN  = {registrar:"KFin Technologies",  url:"https://ipostatus.kfintech.com/"};
+const MUFG  = {registrar:"MUFG Intime",        url:"https://in.mpms.mufg.com/Initial_Offer/public-issues.html"};
+const REGISTRARS = {
+  "Pranav Constructions":  KFIN,
+  "Kanohar Electricals":   MUFG,
+  "Prasol Chemicals":      KFIN,
+  "Glass Wall Systems":    MUFG,
+  "Rentomojo":             KFIN,
+  "Karamtara Engineering": MUFG,
+  "LCC Projects":          KFIN,
+  "Asset Reconstruction":  MUFG,
+  "Manipal Payment":       MUFG,
+  "Steamhouse India":      KFIN,
+  "Veegaland Developers":  MUFG,
+  "Manika Plastech":       MUFG,
+  "NSE":                   MUFG,
+};
 
 const SKEY = "ipoWatch.v3";
 let savedPicks = [];
@@ -228,14 +260,14 @@ function load(){
       const saved = JSON.parse(raw);
       const map = Object.fromEntries((saved.rows||[]).map(r=>[r.n,r]));
       savedPicks = saved.picks || [];
-      return DEFAULTS.map(d=> map[d.n] ? {...d, view:map[d.n].view, vc:map[d.n].vc} : {...d});
+      return DEFAULTS.map(d=> map[d.n] ? {...d, view:map[d.n].view, vc:map[d.n].vc, alloc:map[d.n].alloc ?? null} : {...d});
     }
   }catch(e){}
   return DEFAULTS.map(d=>({...d}));
 }
 function save(){
   try{
-    const rows = data.map(d=>({n:d.n, view:d.view, vc:d.vc}));
+    const rows = data.map(d=>({n:d.n, view:d.view, vc:d.vc, alloc:d.alloc||null}));
     localStorage.setItem(SKEY, JSON.stringify({rows, picks:[...picks]}));
   }catch(e){}
 }
@@ -306,6 +338,37 @@ function starHTML(k){
 function gmpClass(g){ return g==="TBD"?"tbd": g==="0%"?"zero":"pos"; }
 function vClass(vc){ return vc==="go"?"v-go":vc==="stop"?"v-stop":"v-wait"; }
 
+// ---- allotment status ----
+const MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+function batchCloseDate(b){
+  const m = b.match(/[–-]\s*(\d{1,2})\s+([A-Za-z]+)/);
+  if(!m) return null;
+  const mon = MONTHS[m[2].slice(0,3).toLowerCase()];
+  if(mon===undefined) return null;
+  const now = new Date();
+  return new Date(now.getFullYear(), mon, +m[1], 23, 59, 59);
+}
+function hasClosed(b){
+  const d = batchCloseDate(b);
+  return d ? Date.now() > d.getTime() : false;
+}
+function allocClass(a){ return a==="allotted"?"v-go":a==="not-allotted"?"v-stop":"v-wait"; }
+function allocCell(d, id){
+  if(!hasClosed(d.b)) return `<span class="qmark" title="Applications still open">Not out yet</span>`;
+  const reg = REGISTRARS[d.n];
+  const link = reg
+    ? `<a class="alloc-link" href="${reg.url}" target="_blank" rel="noopener">Check @ ${reg.registrar} ↗</a>`
+    : `<a class="alloc-link" href="https://www.bseindia.com/investors/appli_check.aspx" target="_blank" rel="noopener">Check on BSE ↗</a>`;
+  return `<div class="alloc-cell">
+    ${link}
+    <select class="alloc-select ${allocClass(d.alloc)}" data-id="${id}" title="Enter your PAN on the registrar page, then record the result here">
+      <option value=""            ${!d.alloc?"selected":""}>Pending</option>
+      <option value="allotted"    ${d.alloc==="allotted"?"selected":""}>Allotted</option>
+      <option value="not-allotted" ${d.alloc==="not-allotted"?"selected":""}>Not allotted</option>
+    </select>
+  </div>`;
+}
+
 function render(){
   const host = document.getElementById("table-host");
   const batches = [...new Set(data.map(d=>d.b))];
@@ -317,11 +380,12 @@ function render(){
     const bt = rows.reduce((s,r)=>s+r.app,0);
     html += `<div class="batch"><h2>${b}</h2><span class="win">${rows.length} live</span>
       <span class="bt">batch total <b class="num">${money(bt)}</b></span></div>`;
-    html += `<table><thead><tr>
+    html += `<div class="tablewrap"><table><thead><tr>
       <th class="c">Pick</th><th>IPO</th><th class="r">GMP&nbsp;%</th>
       <th class="r hide">Price band</th><th class="r">Retail&nbsp;₹</th>
       <th class="c hide">Quota</th><th class="c hide">Fund.</th>
       <th class="c hide">Val.</th><th class="c hide">List.</th><th>Verdict</th>
+      <th class="c">Allotment</th>
     </tr></thead><tbody>`;
     rows.forEach(d=>{
       const id = data.indexOf(d);
@@ -338,13 +402,36 @@ function render(){
         <td class="c hide">${starHTML(d.v)}</td>
         <td class="c hide">${starHTML(d.l)}</td>
         <td><span class="verdict ${vClass(d.vc)} edit" contenteditable="true" data-id="${id}" data-k="view">${d.view}</span></td>
+        <td class="c">${allocCell(d, id)}</td>
       </tr>`;
     });
-    html += `</tbody></table>`;
+    html += `</tbody></table></div>`;
   });
   host.innerHTML = html || `<p style="color:var(--muted)">No IPOs match this filter.</p>`;
   wire();
   updateTotal();
+  renderHistory();
+}
+
+function renderHistory(){
+  const host = document.getElementById("history-host");
+  const rows = data.filter(d=> d.alloc==="allotted" || d.alloc==="not-allotted");
+  if(!rows.length){ host.innerHTML=""; return; }
+  let html = `<div class="batch" style="margin-top:30px"><h2>Application history</h2>
+    <span class="win">${rows.length} recorded</span></div>`;
+  html += `<div class="tablewrap"><table><thead><tr>
+    <th>IPO</th><th class="c">Window</th><th class="r">GMP&nbsp;%</th><th class="c">Outcome</th>
+  </tr></thead><tbody>`;
+  rows.forEach(d=>{
+    html += `<tr>
+      <td class="name">${d.n}</td>
+      <td class="c">${d.b}</td>
+      <td class="r gmp ${gmpClass(d.gmp)} num">${d.gmp}</td>
+      <td class="c"><span class="verdict ${allocClass(d.alloc)}">${d.alloc==="allotted"?"Allotted":"Not allotted"}</span></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+  host.innerHTML = html;
 }
 
 function wire(){
@@ -360,6 +447,14 @@ function wire(){
   document.querySelectorAll(".edit[data-k='view']").forEach(el=>{
     el.addEventListener("blur", e=>commitView(e.target));
     el.addEventListener("keydown", e=>{ if(e.key==="Enter"){e.preventDefault();e.target.blur();} });
+  });
+  document.querySelectorAll(".alloc-select").forEach(sel=>{
+    sel.addEventListener("change", e=>{
+      const id = +e.target.dataset.id;
+      data[id].alloc = e.target.value || null;
+      save();
+      render();
+    });
   });
 }
 
