@@ -25,6 +25,8 @@
         align-items:flex-end; justify-content:space-between; gap:16px}
   .brand h1{margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em}
   .brand p{margin:3px 0 0; color:#A7AEBD; font-size:12.5px}
+  .welcome{margin:6px 0 0; color:#C7CDDA; font-size:12px}
+  .welcome a{color:#8FA6F2; text-decoration:none} .welcome a:hover{text-decoration:underline}
   .updated{color:#8B93A6; font-size:11.5px; margin-top:6px}
   .updated b{color:#C7CDDA; font-weight:600}
   .updated .dot{display:inline-block; width:7px; height:7px; border-radius:50%;
@@ -108,14 +110,50 @@
     .wrap{padding:14px 14px 50px}
     header{padding:16px 14px}
   }
+
+  .onboard-overlay{display:none; position:fixed; inset:0; background:rgba(15,17,23,.6);
+        align-items:center; justify-content:center; z-index:1000; padding:16px}
+  .onboard-card{background:var(--card); border-radius:14px; padding:26px; width:100%;
+        max-width:380px; box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .onboard-card h2{margin:0 0 6px; font-size:18px; letter-spacing:-.01em}
+  .onboard-card .sub{margin:0 0 18px; color:var(--muted); font-size:12.5px; line-height:1.5}
+  .onboard-card label{display:block; font-size:12px; font-weight:600; color:var(--muted);
+        margin:0 0 14px}
+  .onboard-card input{display:block; width:100%; margin-top:5px; padding:9px 11px;
+        border:1px solid var(--line-strong); border-radius:8px; font-size:14px;
+        font-family:inherit; color:var(--text)}
+  .onboard-card input:focus{outline:2px solid var(--accent); border-color:var(--accent)}
+  .onboard-error{color:var(--stop); font-size:12px; min-height:16px; margin:-4px 0 12px}
+  .onboard-actions{display:flex; gap:8px}
 </style>
 </head>
 <body>
+
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-card">
+    <h2>Welcome to IPO Watch</h2>
+    <p class="sub">Enter your name and PAN to personalize your tracker. Stored only on
+      this device (browser localStorage) — never sent anywhere.</p>
+    <label>Full name
+      <input type="text" id="obName" placeholder="e.g. Anurag Rajput" autocomplete="name">
+    </label>
+    <label>PAN card number
+      <input type="text" id="obPan" placeholder="ABCDE1234F" maxlength="10" autocomplete="off">
+    </label>
+    <div class="onboard-error" id="obError"></div>
+    <div class="onboard-actions">
+      <button class="act refresh" id="obSubmit">Continue</button>
+      <button class="act" id="obCancel" style="display:none">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="mast">
     <div class="brand">
       <h1>IPO Watch</h1>
       <p>Personal application tracker &middot; Indian primary market</p>
+      <p class="welcome" id="welcomeMsg" style="display:none"></p>
       <div class="updated"><span class="dot off" id="livedot"></span><span id="livemsg">Loading live GMP…</span></div>
     </div>
     <div class="hero">
@@ -178,9 +216,10 @@ const DEFAULTS = [
 ];
 
 const SKEY = "ipoWatch.v3";
+let savedPicks = [];
 let data = load();
 let filter = "all";
-const picks = new Set();
+const picks = new Set(savedPicks.filter(id=> id>=0 && id<data.length));
 
 function load(){
   try{
@@ -188,6 +227,7 @@ function load(){
     if(raw){
       const saved = JSON.parse(raw);
       const map = Object.fromEntries((saved.rows||[]).map(r=>[r.n,r]));
+      savedPicks = saved.picks || [];
       return DEFAULTS.map(d=> map[d.n] ? {...d, view:map[d.n].view, vc:map[d.n].vc} : {...d});
     }
   }catch(e){}
@@ -196,9 +236,66 @@ function load(){
 function save(){
   try{
     const rows = data.map(d=>({n:d.n, view:d.view, vc:d.vc}));
-    localStorage.setItem(SKEY, JSON.stringify({rows}));
+    localStorage.setItem(SKEY, JSON.stringify({rows, picks:[...picks]}));
   }catch(e){}
 }
+
+// ---- profile (first-visit onboarding) ----
+const PKEY = "ipoWatch.profile";
+const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+
+function loadProfile(){
+  try{ return JSON.parse(localStorage.getItem(PKEY)); }catch(e){ return null; }
+}
+function saveProfile(p){
+  try{ localStorage.setItem(PKEY, JSON.stringify(p)); }catch(e){}
+}
+function escapeHTML(s){
+  return s.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function maskPan(pan){
+  return pan && pan.length>=4 ? "•••••"+pan.slice(-4) : (pan||"");
+}
+function renderWelcome(){
+  const p = loadProfile();
+  const el = document.getElementById("welcomeMsg");
+  if(p && p.name){
+    el.style.display = "block";
+    el.innerHTML = `Welcome, <b>${escapeHTML(p.name)}</b> &middot; PAN ${maskPan(p.pan)} &middot; <a href="#" id="editProfile">edit</a>`;
+    document.getElementById("editProfile").addEventListener("click", e=>{ e.preventDefault(); openOnboard(p); });
+  }else{
+    el.style.display = "none";
+  }
+}
+function openOnboard(existing){
+  const overlay = document.getElementById("onboardOverlay");
+  document.getElementById("obName").value = existing?.name || "";
+  document.getElementById("obPan").value = existing?.pan || "";
+  document.getElementById("obError").textContent = "";
+  document.getElementById("obCancel").style.display = existing ? "inline-block" : "none";
+  overlay.style.display = "flex";
+  document.getElementById("obName").focus();
+}
+function closeOnboard(){
+  document.getElementById("onboardOverlay").style.display = "none";
+}
+document.getElementById("obPan").addEventListener("input", e=>{
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+});
+document.getElementById("obSubmit").addEventListener("click", ()=>{
+  const name = document.getElementById("obName").value.trim();
+  const pan = document.getElementById("obPan").value.trim().toUpperCase();
+  const err = document.getElementById("obError");
+  if(!name){ err.textContent = "Please enter your name."; return; }
+  if(!PAN_RE.test(pan)){ err.textContent = "PAN should look like ABCDE1234F (5 letters, 4 digits, 1 letter)."; return; }
+  saveProfile({name, pan});
+  closeOnboard();
+  renderWelcome();
+});
+document.getElementById("obCancel").addEventListener("click", closeOnboard);
+document.getElementById("onboardOverlay").addEventListener("keydown", e=>{
+  if(e.key==="Enter"){ e.preventDefault(); document.getElementById("obSubmit").click(); }
+});
 
 function money(n){ return "₹" + n.toLocaleString("en-IN"); }
 function starHTML(k){
@@ -257,6 +354,7 @@ function wire(){
       if(e.target.checked) picks.add(id); else picks.delete(id);
       e.target.closest("tr").classList.toggle("picked", e.target.checked);
       updateTotal();
+      save();
     });
   });
   document.querySelectorAll(".edit[data-k='view']").forEach(el=>{
@@ -332,13 +430,15 @@ document.getElementById("chips").addEventListener("click", e=>{
 });
 document.getElementById("refresh").addEventListener("click", ()=>loadLive(true));
 document.getElementById("selGo").addEventListener("click", ()=>{
-  picks.clear(); data.forEach((d,i)=>{ if(d.vc==="go" && d.app>0) picks.add(i); }); render();
+  picks.clear(); data.forEach((d,i)=>{ if(d.vc==="go" && d.app>0) picks.add(i); }); render(); save();
 });
-document.getElementById("clearSel").addEventListener("click", ()=>{ picks.clear(); render(); });
+document.getElementById("clearSel").addEventListener("click", ()=>{ picks.clear(); render(); save(); });
 
 // ---- boot ----
 render();
 loadLive(false);
+renderWelcome();
+if(!loadProfile()) openOnboard();
 </script>
 </body>
 </html>
