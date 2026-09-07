@@ -1,0 +1,55 @@
+name: Update IPO GMP
+
+# ── When it runs ──────────────────────────────────────────────
+# Every 3 hours (= 8 runs/day). Cron is in UTC.
+# Want fewer runs? Change the cron. Some examples:
+#   "0 */6 * * *"   -> every 6 hours  (4/day)
+#   "0 3,9 * * *"   -> twice a day at 08:30 & 14:30 IST
+# You can also run it by hand from the Actions tab (workflow_dispatch).
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+# Let the job commit the refreshed gmp.json back to the repo.
+permissions:
+  contents: write
+
+# Never let two runs overlap (saves minutes, avoids push conflicts).
+concurrency:
+  group: update-gmp
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    # ── SAFETY CAP ──────────────────────────────────────────────
+    # Hard stop: no single run can burn more than 6 minutes of quota,
+    # even if the site hangs. This is your "don't get into trouble" guard.
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet beautifulsoup4 playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Scrape GMP
+        run: python scripts/scrape_gmp.py
+
+      - name: Commit if data changed
+        run: |
+          git config user.name  "gmp-bot"
+          git config user.email "gmp-bot@users.noreply.github.com"
+          git add gmp.json
+          if git diff --staged --quiet; then
+            echo "No change in GMP — nothing to commit."
+          else
+            git commit -m "Update GMP $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi

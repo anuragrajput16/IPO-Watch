@@ -1,0 +1,21 @@
+{
+  "source": "https://www.ipoji.com/ipo-gmp",
+  "source_stamp": "7 Sep 2026, 9:30 AM IST",
+  "generated_at": "2026-09-07T04:00:00Z",
+  "note": "GMP is unofficial grey-market data. Seed snapshot; refreshed by GitHub Actions.",
+  "items": [
+    {"name": "Pranav Constructions",  "gmp_pct": 29, "gmp_rupees": 36},
+    {"name": "Kanohar Electricals",   "gmp_pct": 30, "gmp_rupees": 190},
+    {"name": "Prasol Chemicals",      "gmp_pct": 16, "gmp_rupees": 110},
+    {"name": "Glass Wall Systems",    "gmp_pct": 18, "gmp_rupees": 32},
+    {"name": "Rentomojo",             "gmp_pct": 35, "gmp_rupees": 140},
+    {"name": "Karamtara Engineering", "gmp_pct": 20, "gmp_rupees": 50},
+    {"name": "LCC Projects",          "gmp_pct": 15, "gmp_rupees": 22},
+    {"name": "Asset Reconstruction",  "gmp_pct": null, "gmp_rupees": null},
+    {"name": "Manipal Payment",       "gmp_pct": 7,  "gmp_rupees": 25},
+    {"name": "Steamhouse India",      "gmp_pct": null, "gmp_rupees": null},
+    {"name": "Veegaland Developers",  "gmp_pct": 17, "gmp_rupees": 24},
+    {"name": "Manika Plastech",       "gmp_pct": null, "gmp_rupees": null},
+    {"name": "NSE",                   "gmp_pct": null, "gmp_rupees": null}
+  ]
+}

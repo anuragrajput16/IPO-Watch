@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPO Watch</title>
+<style>
+  :root{
+    --ink:#15171E; --ink-2:#20232D; --paper:#F5F6F8; --card:#FFFFFF;
+    --line:#E3E6EC; --line-strong:#C9CED8; --muted:#6A7280; --text:#1A1D25;
+    --accent:#3556D4; --accent-soft:#EAEEFB;
+    --go:#1B7F45; --go-soft:#E7F4EC;
+    --wait:#B07D0A; --wait-soft:#FBF3DE;
+    --stop:#C0392B; --stop-soft:#FBEBE9;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--paper); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14px; line-height:1.4;}
+  .num{font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1}
+
+  header{background:var(--ink); color:#fff; padding:20px 22px 18px}
+  .mast{max-width:1180px; margin:0 auto; display:flex; flex-wrap:wrap;
+        align-items:flex-end; justify-content:space-between; gap:16px}
+  .brand h1{margin:0; font-size:22px; font-weight:700; letter-spacing:-.02em}
+  .brand p{margin:3px 0 0; color:#A7AEBD; font-size:12.5px}
+  .updated{color:#8B93A6; font-size:11.5px; margin-top:6px}
+  .updated b{color:#C7CDDA; font-weight:600}
+  .updated .dot{display:inline-block; width:7px; height:7px; border-radius:50%;
+                background:#4ADE80; margin-right:5px; vertical-align:middle}
+  .updated .dot.stale{background:#EAB308} .updated .dot.off{background:#9AA2B1}
+  .hero{text-align:right; min-width:210px}
+  .hero .label{color:#8B93A6; font-size:11px; letter-spacing:.04em}
+  .hero .amt{font-size:34px; font-weight:750; letter-spacing:-.02em; line-height:1.1;
+             color:#fff; transition:color .2s}
+  .hero .sub{color:#8B93A6; font-size:11.5px; margin-top:2px}
+  .hero .amt.flash{color:#8FE3AC}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:16px 22px 60px}
+  .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:16px 0 14px}
+  .chips{display:flex; gap:6px; flex-wrap:wrap}
+  .chip{border:1px solid var(--line-strong); background:var(--card); color:var(--muted);
+        padding:6px 12px; border-radius:999px; font-size:12.5px; cursor:pointer; font-weight:600}
+  .chip[aria-pressed="true"]{background:var(--ink); color:#fff; border-color:var(--ink)}
+  .spacer{flex:1}
+  button.act{border:1px solid var(--line-strong); background:var(--card); color:var(--text);
+        padding:7px 13px; border-radius:8px; font-size:12.5px; cursor:pointer; font-weight:600}
+  button.act:hover{border-color:var(--accent); color:var(--accent)}
+  button.refresh{background:var(--accent); color:#fff; border-color:var(--accent)}
+  button.refresh:hover{background:#2b46b3; color:#fff}
+  button.refresh[disabled]{opacity:.6; cursor:default}
+  .spin{display:inline-block; width:11px; height:11px; border:2px solid #fff;
+        border-top-color:transparent; border-radius:50%; animation:sp .7s linear infinite;
+        vertical-align:-1px; margin-right:6px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .note{background:var(--wait-soft); border:1px solid #EAD9A8; color:#7A5A08;
+        border-radius:10px; padding:11px 14px; font-size:12.5px; margin-bottom:16px}
+  .note b{font-weight:700}
+  .fail{background:var(--stop-soft); border:1px solid #EEC3BD; color:#8A2A20;
+        border-radius:10px; padding:10px 14px; font-size:12.5px; margin-bottom:16px; display:none}
+
+  .batch{margin:22px 0 6px; display:flex; align-items:baseline; gap:10px}
+  .batch h2{margin:0; font-size:14px; font-weight:700; letter-spacing:-.01em}
+  .batch .win{color:var(--muted); font-size:12px}
+  .batch .bt{margin-left:auto; color:var(--muted); font-size:12px}
+  .batch .bt b{color:var(--text); font-weight:700}
+
+  table{width:100%; border-collapse:collapse; background:var(--card);
+        border:1px solid var(--line); border-radius:12px; overflow:hidden}
+  thead th{background:#F0F2F6; color:#4A5160; font-size:11px; font-weight:700;
+           text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); white-space:nowrap}
+  thead th.r{text-align:right} thead th.c{text-align:center}
+  tbody td{padding:10px; border-bottom:1px solid var(--line); vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#FAFBFD}
+  .name{font-weight:650; color:var(--text)}
+  .r{text-align:right} .c{text-align:center}
+  .gmp{font-weight:700}
+  .gmp.pos{color:var(--go)} .gmp.zero{color:var(--muted)} .gmp.tbd{color:var(--muted)}
+  .gmprup{font-weight:600; color:var(--muted); font-size:11px}
+  .stars{letter-spacing:1px; font-size:12.5px}
+  .star-on{color:#E8A33D} .star-off{color:#D5D9E0}
+  .qmark{color:var(--muted)}
+
+  .verdict{display:inline-block; padding:4px 10px; border-radius:999px;
+           font-size:11.5px; font-weight:700; white-space:nowrap}
+  .v-go{background:var(--go-soft); color:var(--go)}
+  .v-wait{background:var(--wait-soft); color:var(--wait)}
+  .v-stop{background:var(--stop-soft); color:var(--stop)}
+
+  .pick{width:16px; height:16px; accent-color:var(--accent); cursor:pointer}
+  td.pickcell{text-align:center; width:36px}
+  tr.picked{background:var(--accent-soft) !important}
+
+  .edit{cursor:text; border-bottom:1px dashed transparent; border-radius:3px; padding:1px 3px}
+  .edit:hover{border-bottom-color:var(--line-strong); background:#F3F5FA}
+  .edit:focus{outline:2px solid var(--accent); background:#fff}
+
+  footer{max-width:1180px; margin:0 auto; padding:0 22px 40px; color:var(--muted);
+         font-size:11.5px; line-height:1.6}
+  footer b{color:var(--text)}
+
+  @media (max-width:720px){
+    .hero{text-align:left}
+    thead th.hide, tbody td.hide{display:none}
+    .wrap{padding:14px 14px 50px}
+    header{padding:16px 14px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="mast">
+    <div class="brand">
+      <h1>IPO Watch</h1>
+      <p>Personal application tracker &middot; Indian primary market</p>
+      <div class="updated"><span class="dot off" id="livedot"></span><span id="livemsg">Loading live GMP…</span></div>
+    </div>
+    <div class="hero">
+      <div class="label">Money blocked if you apply to selected</div>
+      <div class="amt num" id="total">₹0</div>
+      <div class="sub" id="picksub">0 IPOs selected</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <div class="chips" id="chips">
+      <button class="chip" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" data-f="go" aria-pressed="false">Apply</button>
+      <button class="chip" data-f="wait" aria-pressed="false">Wait / Watch</button>
+      <button class="chip" data-f="stop" aria-pressed="false">Skip</button>
+    </div>
+    <div class="spacer"></div>
+    <button class="act refresh" id="refresh">Refresh GMP</button>
+    <button class="act" id="selGo">Select all “Apply”</button>
+    <button class="act" id="clearSel">Clear selection</button>
+  </div>
+
+  <div class="fail" id="fail"></div>
+
+  <div class="note">
+    Overlapping windows can’t share money. In UPI/ASBA IPOs your funds stay <b>blocked</b>
+    until ~2 working days after each close, so IPOs open on the same days need their cash
+    <b>at the same time</b>. The counter above sums everything you select — treat it as the
+    peak you must keep free, not a recyclable pot.
+  </div>
+
+  <div id="table-host"></div>
+</div>
+
+<footer>
+  <p><b>Live GMP:</b> figures are pulled from a <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">gmp.json</code> file that a scheduled job refreshes every few hours, sourced from ipoji.com.
+  Press <b>Refresh GMP</b> to re-read the latest. Open this page from your GitHub Pages URL (not the local file) for live data.</p>
+  <p><b>GMP is unofficial</b> grey-market data — a rough sentiment signal, not a forecast, and sources disagree. Application amounts are 1 lot at the upper band (cut-off). None of this is financial advice.</p>
+</footer>
+
+<script>
+const GMP_URL = "gmp.json";
+
+const DEFAULTS = [
+  {b:"7–9 Sep",   n:"Pranav Constructions",  gmp:"29%",  rup:36,  band:"₹118–124", app:14880, quota:"45%", f:4, v:4, l:5, view:"Apply",          vc:"go"},
+  {b:"8–10 Sep",  n:"Kanohar Electricals",   gmp:"30%",  rup:190, band:"₹601–632", app:14536, quota:"35%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
+  {b:"8–10 Sep",  n:"Prasol Chemicals",      gmp:"16%",  rup:110, band:"₹643–676", app:14872, quota:"35%", f:4, v:3, l:4, view:"Cautious Apply", vc:"wait"},
+  {b:"8–10 Sep",  n:"Glass Wall Systems",    gmp:"18%",  rup:32,  band:"₹172–182", app:14924, quota:"35%", f:4, v:2, l:3, view:"Skip",           vc:"wait"},
+  {b:"9–11 Sep",  n:"Rentomojo",             gmp:"35%",  rup:140, band:"₹384–404", app:14948, quota:"10%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
+  {b:"9–11 Sep",  n:"Karamtara Engineering", gmp:"20%",  rup:50,  band:"₹241–254", app:14986, quota:"35%", f:5, v:4, l:4, view:"Strong Apply",   vc:"go"},
+  {b:"9–11 Sep",  n:"LCC Projects",          gmp:"15%",  rup:22,  band:"₹139–146", app:14892, quota:"35%", f:5, v:4, l:4, view:"Apply",          vc:"go"},
+  {b:"9–11 Sep",  n:"Asset Reconstruction",  gmp:"TBD",  rup:null,band:"₹132–139", app:14873, quota:"35%", f:5, v:4, l:2, view:"Long-term",      vc:"wait"},
+  {b:"9–11 Sep",  n:"Manipal Payment",       gmp:"7%",   rup:25,  band:"₹322–339", app:14916, quota:"35%", f:-1,v:-1,l:3, view:"Wait",           vc:"wait"},
+  {b:"9–11 Sep",  n:"Steamhouse India",      gmp:"TBD",  rup:null,band:"₹77–81",   app:14900, quota:"35%", f:3, v:-1,l:2, view:"Skip",           vc:"stop"},
+  {b:"10–15 Sep", n:"Veegaland Developers",  gmp:"17%",  rup:24,  band:"₹130–140", app:14980, quota:"35%", f:4, v:3, l:4, view:"Watch",          vc:"wait"},
+  {b:"11–16 Sep", n:"Manika Plastech",       gmp:"TBD",  rup:null,band:"₹40–43",   app:0,     quota:"35%", f:3, v:-1,l:2, view:"Wait",           vc:"wait"},
+  {b:"21–23 Sep", n:"NSE",                   gmp:"TBD",  rup:null,band:"TBD",      app:0,     quota:"TBD", f:5, v:-1,l:5, view:"WAIT",           vc:"wait"},
+];
+
+const SKEY = "ipoWatch.v3";
+let data = load();
+let filter = "all";
+const picks = new Set();
+
+function load(){
+  try{
+    const raw = localStorage.getItem(SKEY);
+    if(raw){
+      const saved = JSON.parse(raw);
+      const map = Object.fromEntries((saved.rows||[]).map(r=>[r.n,r]));
+      return DEFAULTS.map(d=> map[d.n] ? {...d, view:map[d.n].view, vc:map[d.n].vc} : {...d});
+    }
+  }catch(e){}
+  return DEFAULTS.map(d=>({...d}));
+}
+function save(){
+  try{
+    const rows = data.map(d=>({n:d.n, view:d.view, vc:d.vc}));
+    localStorage.setItem(SKEY, JSON.stringify({rows}));
+  }catch(e){}
+}
+
+function money(n){ return "₹" + n.toLocaleString("en-IN"); }
+function starHTML(k){
+  if(k<0) return '<span class="qmark">?</span>';
+  let s=""; for(let i=1;i<=5;i++) s += `<span class="${i<=k?'star-on':'star-off'}">★</span>`;
+  return `<span class="stars">${s}</span>`;
+}
+function gmpClass(g){ return g==="TBD"?"tbd": g==="0%"?"zero":"pos"; }
+function vClass(vc){ return vc==="go"?"v-go":vc==="stop"?"v-stop":"v-wait"; }
+
+function render(){
+  const host = document.getElementById("table-host");
+  const batches = [...new Set(data.map(d=>d.b))];
+  let html = "";
+  batches.forEach(b=>{
+    let rows = data.filter(d=>d.b===b);
+    if(filter!=="all") rows = rows.filter(d=>d.vc===filter);
+    if(!rows.length) return;
+    const bt = rows.reduce((s,r)=>s+r.app,0);
+    html += `<div class="batch"><h2>${b}</h2><span class="win">${rows.length} live</span>
+      <span class="bt">batch total <b class="num">${money(bt)}</b></span></div>`;
+    html += `<table><thead><tr>
+      <th class="c">Pick</th><th>IPO</th><th class="r">GMP&nbsp;%</th>
+      <th class="r hide">Price band</th><th class="r">Retail&nbsp;₹</th>
+      <th class="c hide">Quota</th><th class="c hide">Fund.</th>
+      <th class="c hide">Val.</th><th class="c hide">List.</th><th>Verdict</th>
+    </tr></thead><tbody>`;
+    rows.forEach(d=>{
+      const id = data.indexOf(d);
+      const canPick = d.app>0;
+      const rup = (d.rup!=null) ? `<div class="gmprup num">₹${d.rup}</div>` : "";
+      html += `<tr class="${picks.has(id)?"picked":""}" data-id="${id}">
+        <td class="pickcell">${canPick?`<input class="pick" type="checkbox" ${picks.has(id)?"checked":""} data-id="${id}">`:""}</td>
+        <td class="name">${d.n}</td>
+        <td class="r gmp ${gmpClass(d.gmp)} num">${d.gmp}${rup}</td>
+        <td class="r num hide">${d.band}</td>
+        <td class="r num">${d.app>0?money(d.app):'<span class="qmark">TBD</span>'}</td>
+        <td class="c hide">${d.quota}</td>
+        <td class="c hide">${starHTML(d.f)}</td>
+        <td class="c hide">${starHTML(d.v)}</td>
+        <td class="c hide">${starHTML(d.l)}</td>
+        <td><span class="verdict ${vClass(d.vc)} edit" contenteditable="true" data-id="${id}" data-k="view">${d.view}</span></td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  });
+  host.innerHTML = html || `<p style="color:var(--muted)">No IPOs match this filter.</p>`;
+  wire();
+  updateTotal();
+}
+
+function wire(){
+  document.querySelectorAll(".pick").forEach(cb=>{
+    cb.addEventListener("change", e=>{
+      const id = +e.target.dataset.id;
+      if(e.target.checked) picks.add(id); else picks.delete(id);
+      e.target.closest("tr").classList.toggle("picked", e.target.checked);
+      updateTotal();
+    });
+  });
+  document.querySelectorAll(".edit[data-k='view']").forEach(el=>{
+    el.addEventListener("blur", e=>commitView(e.target));
+    el.addEventListener("keydown", e=>{ if(e.key==="Enter"){e.preventDefault();e.target.blur();} });
+  });
+}
+
+function commitView(el){
+  const id=+el.dataset.id; const val=el.textContent.trim()||data[id].view;
+  data[id].view=val;
+  const low=val.toLowerCase(); let vc="wait";
+  if(low.includes("apply")&&!low.includes("cautious")&&!low.includes("skip")) vc="go";
+  else if(low.includes("skip")||low.includes("avoid")) vc="stop";
+  data[id].vc=vc; save();
+  el.className=`verdict ${vClass(vc)} edit`;
+}
+
+function updateTotal(){
+  let sum=0; picks.forEach(id=> sum+=data[id].app);
+  const amt=document.getElementById("total");
+  amt.textContent=money(sum);
+  amt.classList.add("flash"); setTimeout(()=>amt.classList.remove("flash"),220);
+  const c=picks.size;
+  document.getElementById("picksub").textContent = `${c} IPO${c===1?"":"s"} selected`;
+}
+
+// ---- live GMP ----
+function setLive(state, text){
+  const dot=document.getElementById("livedot"), msg=document.getElementById("livemsg");
+  dot.className = "dot " + (state==="ok"?"":state==="stale"?"stale":"off");
+  msg.innerHTML = text;
+}
+function fmtWhen(iso){
+  try{ return new Date(iso).toLocaleString([], {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
+  catch(e){ return iso; }
+}
+async function loadLive(manual){
+  const btn=document.getElementById("refresh");
+  if(manual){ btn.disabled=true; btn.innerHTML='<span class="spin"></span>Refreshing'; }
+  document.getElementById("fail").style.display="none";
+  try{
+    const r = await fetch(GMP_URL + "?t=" + Date.now(), {cache:"no-store"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const j = await r.json();
+    let n=0;
+    (j.items||[]).forEach(it=>{
+      const row = data.find(d=> d.n === it.name);
+      if(!row) return;
+      if(it.gmp_pct===null || it.gmp_pct===undefined){ row.gmp="TBD"; row.rup=null; }
+      else { row.gmp = it.gmp_pct + "%"; row.rup = (it.gmp_rupees!=null)?it.gmp_rupees:null; n++; }
+    });
+    const when = j.source_stamp || (j.generated_at ? fmtWhen(j.generated_at) : "just now");
+    setLive("ok", `Live GMP · <b>${when}</b> · ${n} quotes · source ipoji.com`);
+    render();
+  }catch(e){
+    setLive("off", `Showing saved snapshot — live file not reachable`);
+    const f=document.getElementById("fail");
+    f.style.display="block";
+    f.innerHTML = `Couldn’t load <b>gmp.json</b> (${e.message}). If you opened this as a local file, GMP won’t auto-load — open it from your GitHub Pages URL. The saved numbers below still work.`;
+    render();
+  }finally{
+    if(manual){ btn.disabled=false; btn.textContent="Refresh GMP"; }
+  }
+}
+
+// ---- controls ----
+document.getElementById("chips").addEventListener("click", e=>{
+  const btn=e.target.closest(".chip"); if(!btn) return;
+  filter=btn.dataset.f;
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed", c===btn));
+  render();
+});
+document.getElementById("refresh").addEventListener("click", ()=>loadLive(true));
+document.getElementById("selGo").addEventListener("click", ()=>{
+  picks.clear(); data.forEach((d,i)=>{ if(d.vc==="go" && d.app>0) picks.add(i); }); render();
+});
+document.getElementById("clearSel").addEventListener("click", ()=>{ picks.clear(); render(); });
+
+// ---- boot ----
+render();
+loadLive(false);
+</script>
+</body>
+</html>
