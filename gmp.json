@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
   "source_stamp": "8 Sept, 17:44",
-  "generated_at": "2026-09-08T13:08:56Z",
+  "generated_at": "2026-09-08T18:10:12Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -11,18 +11,18 @@
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 31.33,
-      "gmp_rupees": 198
+      "gmp_pct": 33.23,
+      "gmp_rupees": 210
     },
     {
       "name": "Prasol Chemicals",
-      "gmp_pct": 12.57,
-      "gmp_rupees": 85
+      "gmp_pct": 5.91,
+      "gmp_rupees": 40
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 27.47,
-      "gmp_rupees": 50
+      "gmp_pct": 30.22,
+      "gmp_rupees": 55
     },
     {
       "name": "Rentomojo",
@@ -31,8 +31,8 @@
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 22.83,
-      "gmp_rupees": 58
+      "gmp_pct": 25.59,
+      "gmp_rupees": 65
     },
     {
       "name": "LCC Projects",
@@ -51,8 +51,8 @@
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": null,
-      "gmp_rupees": 0
+      "gmp_pct": 18.52,
+      "gmp_rupees": 15
     },
     {
       "name": "Veegaland Developers",
@@ -67,7 +67,7 @@
     {
       "name": "NSE",
       "gmp_pct": null,
-      "gmp_rupees": 200
+      "gmp_rupees": 245
     }
   ]
 }
