@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "8 Sept, 17:44",
-  "generated_at": "2026-09-09T01:58:16Z",
+  "source_stamp": "9 Sept, 08:12",
+  "generated_at": "2026-09-09T07:38:50Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -11,8 +11,8 @@
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 33.23,
-      "gmp_rupees": 210
+      "gmp_pct": 34.49,
+      "gmp_rupees": 218
     },
     {
       "name": "Prasol Chemicals",
@@ -26,18 +26,18 @@
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 30.94,
-      "gmp_rupees": 125
+      "gmp_pct": 33.42,
+      "gmp_rupees": 135
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 25.59,
-      "gmp_rupees": 65
+      "gmp_pct": 27.17,
+      "gmp_rupees": 69
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 17.12,
-      "gmp_rupees": 25
+      "gmp_pct": 22.6,
+      "gmp_rupees": 33
     },
     {
       "name": "Asset Reconstruction",
@@ -51,8 +51,8 @@
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": 18.52,
-      "gmp_rupees": 15
+      "gmp_pct": 22.22,
+      "gmp_rupees": 18
     },
     {
       "name": "Veegaland Developers",
@@ -61,13 +61,13 @@
     },
     {
       "name": "Manika Plastech",
-      "gmp_pct": 46.51,
-      "gmp_rupees": 20
+      "gmp_pct": 39.53,
+      "gmp_rupees": 17
     },
     {
       "name": "NSE",
       "gmp_pct": null,
-      "gmp_rupees": 245
+      "gmp_rupees": 255
     }
   ]
 }
