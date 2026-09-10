@@ -1,18 +1,18 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "9 Sept, 18:01",
-  "generated_at": "2026-09-10T01:54:54Z",
+  "source_stamp": "10 Sept, 11:43",
+  "generated_at": "2026-09-10T07:35:19Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
       "name": "Pranav Constructions",
-      "gmp_pct": 35.48,
-      "gmp_rupees": 44
+      "gmp_pct": 32.26,
+      "gmp_rupees": 40
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 34.49,
-      "gmp_rupees": 218
+      "gmp_pct": 35.44,
+      "gmp_rupees": 224
     },
     {
       "name": "Prasol Chemicals",
@@ -21,53 +21,53 @@
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 30.22,
-      "gmp_rupees": 55
+      "gmp_pct": 36.26,
+      "gmp_rupees": 66
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 33.42,
-      "gmp_rupees": 135
+      "gmp_pct": 35.64,
+      "gmp_rupees": 144
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 27.17,
-      "gmp_rupees": 69
+      "gmp_pct": 29.53,
+      "gmp_rupees": 75
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 22.6,
-      "gmp_rupees": 33
+      "gmp_pct": 30.82,
+      "gmp_rupees": 45
     },
     {
       "name": "Asset Reconstruction",
-      "gmp_pct": 19.42,
-      "gmp_rupees": 27
+      "gmp_pct": 17.27,
+      "gmp_rupees": 24
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": 11.21,
-      "gmp_rupees": 38
+      "gmp_pct": 2.36,
+      "gmp_rupees": 8
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": 22.22,
-      "gmp_rupees": 18
+      "gmp_pct": 24.69,
+      "gmp_rupees": 20
     },
     {
       "name": "Veegaland Developers",
-      "gmp_pct": 21.43,
-      "gmp_rupees": 30
+      "gmp_pct": 17.14,
+      "gmp_rupees": 24
     },
     {
       "name": "Manika Plastech",
-      "gmp_pct": 39.53,
-      "gmp_rupees": 17
+      "gmp_pct": 30.23,
+      "gmp_rupees": 13
     },
     {
       "name": "NSE",
       "gmp_pct": null,
-      "gmp_rupees": 255
+      "gmp_rupees": 222
     }
   ]
 }
