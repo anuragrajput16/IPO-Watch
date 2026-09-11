@@ -1,48 +1,48 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "10 Sept, 16:15",
-  "generated_at": "2026-09-11T01:53:23Z",
+  "source_stamp": "11 Sept, 08:15",
+  "generated_at": "2026-09-11T07:33:55Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
       "name": "Pranav Constructions",
-      "gmp_pct": 32.26,
-      "gmp_rupees": 40
+      "gmp_pct": 40.32,
+      "gmp_rupees": 50
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 35.44,
-      "gmp_rupees": 224
+      "gmp_pct": 37.34,
+      "gmp_rupees": 236
     },
     {
       "name": "Prasol Chemicals",
-      "gmp_pct": 5.91,
-      "gmp_rupees": 40
+      "gmp_pct": null,
+      "gmp_rupees": 0
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 36.26,
-      "gmp_rupees": 66
-    },
-    {
-      "name": "Rentomojo",
-      "gmp_pct": 35.64,
-      "gmp_rupees": 144
-    },
-    {
-      "name": "Karamtara Engineering",
-      "gmp_pct": 29.53,
-      "gmp_rupees": 75
-    },
-    {
-      "name": "LCC Projects",
-      "gmp_pct": 30.82,
+      "gmp_pct": 24.73,
       "gmp_rupees": 45
     },
     {
+      "name": "Rentomojo",
+      "gmp_pct": 34.16,
+      "gmp_rupees": 138
+    },
+    {
+      "name": "Karamtara Engineering",
+      "gmp_pct": 27.17,
+      "gmp_rupees": 69
+    },
+    {
+      "name": "LCC Projects",
+      "gmp_pct": 34.25,
+      "gmp_rupees": 50
+    },
+    {
       "name": "Asset Reconstruction",
-      "gmp_pct": 17.27,
-      "gmp_rupees": 24
+      "gmp_pct": 10.07,
+      "gmp_rupees": 14
     },
     {
       "name": "Manipal Payment",
@@ -51,8 +51,8 @@
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": 24.69,
-      "gmp_rupees": 20
+      "gmp_pct": 27.16,
+      "gmp_rupees": 22
     },
     {
       "name": "Veegaland Developers",
@@ -66,8 +66,8 @@
     },
     {
       "name": "NSE",
-      "gmp_pct": 12.44,
-      "gmp_rupees": 222
+      "gmp_pct": 10.53,
+      "gmp_rupees": 188
     }
   ]
 }
