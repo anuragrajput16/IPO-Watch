@@ -38,6 +38,7 @@
              color:#fff; transition:color .2s}
   .hero .sub{color:#8B93A6; font-size:11.5px; margin-top:2px}
   .hero .amt.flash{color:#8FE3AC}
+  .hero .mine{color:#A9B4CC} .hero .mine b{color:#DCE3F2; font-weight:700}
 
   .wrap{max-width:1180px; margin:0 auto; padding:16px 22px 60px}
   .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:16px 0 14px}
@@ -52,6 +53,7 @@
   button.refresh{background:var(--accent); color:#fff; border-color:var(--accent)}
   button.refresh:hover{background:#2b46b3; color:#fff}
   button.refresh[disabled]{opacity:.6; cursor:default}
+  button.danger:hover{border-color:var(--stop); color:var(--stop)}
   .spin{display:inline-block; width:11px; height:11px; border:2px solid #fff;
         border-top-color:transparent; border-radius:50%; animation:sp .7s linear infinite;
         vertical-align:-1px; margin-right:6px}
@@ -63,7 +65,7 @@
   .fail{background:var(--stop-soft); border:1px solid #EEC3BD; color:#8A2A20;
         border-radius:10px; padding:10px 14px; font-size:12.5px; margin-bottom:16px; display:none}
 
-  .batch{margin:22px 0 6px; display:flex; align-items:baseline; gap:10px}
+  .batch{margin:22px 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
   .batch h2{margin:0; font-size:14px; font-weight:700; letter-spacing:-.01em}
   .batch .win{color:var(--muted); font-size:12px}
   .batch .bt{margin-left:auto; color:var(--muted); font-size:12px}
@@ -77,7 +79,7 @@
   thead th.r{text-align:right} thead th.c{text-align:center}
   tbody td{padding:10px; border-bottom:1px solid var(--line); vertical-align:middle}
   tbody tr:last-child td{border-bottom:none}
-  tbody tr:hover{background:#FAFBFD}
+  tbody tr.main:hover{background:#FAFBFD}
   .name{font-weight:650; color:var(--text)}
   .r{text-align:right} .c{text-align:center}
   .gmp{font-weight:700}
@@ -93,9 +95,16 @@
   .v-wait{background:var(--wait-soft); color:var(--wait)}
   .v-stop{background:var(--stop-soft); color:var(--stop)}
 
-  .pick{width:16px; height:16px; accent-color:var(--accent); cursor:pointer}
-  td.pickcell{text-align:center; width:36px}
-  tr.picked{background:var(--accent-soft) !important}
+  td.pickcell{text-align:center; width:64px; white-space:nowrap}
+  tr.applied{background:var(--accent-soft)}
+  tr.applied:hover{background:#E1E7FA !important}
+  .applied-btn{border:1px solid var(--line-strong); background:var(--card); color:var(--muted);
+        border-radius:999px; padding:4px 10px; font-size:11.5px; font-weight:700;
+        cursor:pointer; font-family:inherit; min-width:46px}
+  .applied-btn:hover{border-color:var(--accent); color:var(--accent)}
+  .applied-btn.on{background:var(--accent); border-color:var(--accent); color:#fff}
+  .ipo-toggle{cursor:pointer}
+  .ipo-toggle:hover{color:var(--accent)}
 
   .edit{cursor:text; border-bottom:1px dashed transparent; border-radius:3px; padding:1px 3px}
   .edit:hover{border-bottom-color:var(--line-strong); background:#F3F5FA}
@@ -109,6 +118,33 @@
   .alloc-select.v-go{background:var(--go-soft); color:var(--go)}
   .alloc-select.v-wait{background:var(--wait-soft); color:var(--wait)}
   .alloc-select.v-stop{background:var(--stop-soft); color:var(--stop)}
+  .tallies{font-size:11px; color:var(--muted); white-space:nowrap}
+  .tallies b{font-weight:700}
+  .tallies .g{color:var(--go)} .tallies .s{color:var(--stop)}
+
+  /* ---- per-IPO applicant panel ---- */
+  tr.detail>td{background:#F7F8FC; padding:0; border-bottom:1px solid var(--line)}
+  .panel{padding:12px 14px 14px}
+  .panel-head{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+        font-size:12px; color:var(--muted); margin-bottom:9px}
+  .panel-head b{color:var(--text); font-weight:700}
+  .panel-head .ph-right{margin-left:auto}
+  .ptable{min-width:0; border:1px solid var(--line); background:var(--card)}
+  .ptable thead th{background:#EEF0F6; font-size:10.5px; padding:7px 9px}
+  .ptable tbody td{padding:7px 9px; font-size:12.5px}
+  .ptable tbody tr.on{background:var(--accent-soft)}
+  .ptable tbody tr:last-child td{border-bottom:none}
+  .amt-in{width:110px; text-align:right; padding:5px 8px; border:1px solid var(--line-strong);
+        border-radius:7px; font-family:inherit; font-size:12.5px; color:var(--text); background:#fff}
+  .amt-in:focus{outline:2px solid var(--accent); border-color:var(--accent)}
+  .amt-in:disabled{background:#F2F4F8; color:#A8AEBB; border-style:dashed}
+  .pan-mini{font-size:11px; color:var(--muted); display:none}
+  .pan-mini.always{display:block}
+  .panel-empty{font-size:12.5px; color:var(--muted); display:flex; align-items:center;
+        gap:10px; flex-wrap:wrap}
+
+  /* ---- summary ---- */
+  .sumtable td.money{font-weight:700}
 
   footer{max-width:1180px; margin:0 auto; padding:0 22px 40px; color:var(--muted);
          font-size:11.5px; line-height:1.6}
@@ -117,14 +153,112 @@
   @media (max-width:720px){
     .hero{text-align:left}
     thead th.hide, tbody td.hide{display:none}
+    .pan-mini{display:block}
     .wrap{padding:14px 14px 50px}
     header{padding:16px 14px}
+    .panel{padding:10px}
   }
 
+  /* ---- modals ---- */
   .onboard-overlay{display:none; position:fixed; inset:0; background:rgba(15,17,23,.6);
         align-items:center; justify-content:center; z-index:1000; padding:16px}
+  .onboard-overlay.open{display:flex}
+  /* the add/edit form opens on top of the people manager */
+  #onboardOverlay{z-index:1010}
+  .onboard-card.wide{max-width:520px}
+
+  /* ---- "who is applying" picker ---- */
+  .onboard-card label.pick-row{display:flex; align-items:center; gap:11px;
+        padding:9px 10px; border:1px solid var(--line); border-radius:10px;
+        margin:0 0 7px; cursor:pointer; background:var(--card)}
+  .pick-row:hover{border-color:var(--line-strong); background:#FAFBFD}
+  .pick-row.on{background:var(--accent-soft); border-color:#B9C6EF}
+  .onboard-card .pick-row input[type=checkbox]{display:block; width:17px; height:17px;
+        margin:0; padding:0; accent-color:var(--accent); cursor:pointer; flex:none}
+  .pick-row .who{flex:1; min-width:0}
+  .pick-row .who .nm{display:block; font-weight:650; font-size:13.5px; color:var(--text)}
+  .pick-row .who .pn{display:block; font-size:11px; color:var(--muted);
+        font-variant-numeric:tabular-nums}
+  .pick-row .amt-wrap{display:flex; align-items:center; gap:5px; flex:none}
+  .pick-row .rs{color:var(--muted); font-size:12.5px}
+  .onboard-card .pick-row .pick-amt{display:block; width:112px; margin:0;
+        text-align:right; padding:6px 9px; border:1px solid var(--line-strong);
+        border-radius:7px; font-family:inherit; font-size:13px; color:var(--text);
+        background:#fff; font-variant-numeric:tabular-nums}
+  .onboard-card .pick-row .pick-amt:focus{outline:2px solid var(--accent); border-color:var(--accent)}
+  .onboard-card .pick-row .pick-amt:disabled{background:#F2F4F8; color:#AEB4C1; border-style:dashed}
+  .pick-tot{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+        border-top:1px solid var(--line); margin-top:12px; padding-top:12px;
+        font-size:12.5px; color:var(--muted)}
+  .pick-tot .big{margin-left:auto; font-size:20px; font-weight:750; color:var(--text);
+        letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+  .pick-check{font-size:11.5px; margin-top:6px; min-height:15px}
+  .pick-check.match{color:var(--go)}
+  .pick-check.diff{color:var(--wait)}
+
+  /* ---- step 2: one block per applicant, optionally split by funder ---- */
+  .ap-block{border:1px solid var(--line); border-radius:11px; padding:11px 12px;
+        margin-bottom:9px; background:var(--card)}
+  .ap-block .ab-head{display:flex; align-items:center; gap:10px}
+  .ap-block .ab-who{flex:1; min-width:0}
+  .ap-block .ab-nm{font-weight:650; font-size:13.5px}
+  .ap-block .ab-pan{font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums}
+  .onboard-card .ap-block input.ap-amt{display:block; width:112px; margin:0; text-align:right;
+        padding:6px 9px; border:1px solid var(--line-strong); border-radius:7px;
+        font-family:inherit; font-size:13px; color:var(--text); background:#fff;
+        font-variant-numeric:tabular-nums}
+  .onboard-card .ap-block input.ap-amt:focus{outline:2px solid var(--accent); border-color:var(--accent)}
+  .ab-funded{font-size:11.5px; color:var(--muted); margin-top:7px;
+        display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+  .ab-split{margin-top:9px; border-top:1px dashed var(--line-strong); padding-top:9px}
+  .ab-row{display:flex; align-items:center; gap:9px; padding:4px 0}
+  .ab-row .nm{flex:1; min-width:0; font-size:12.5px}
+  .ab-row .nm .own{color:var(--muted); font-size:10.5px; font-weight:700;
+        letter-spacing:.03em; margin-left:5px}
+  .onboard-card .ab-row input.ab-in{display:block; width:104px; margin:0; text-align:right;
+        padding:5px 8px; border:1px solid var(--line-strong); border-radius:7px;
+        font-family:inherit; font-size:12.5px; color:var(--text); background:#fff;
+        font-variant-numeric:tabular-nums}
+  .onboard-card .ab-row input.ab-in:focus{outline:2px solid var(--accent); border-color:var(--accent)}
+  .ab-bal{font-size:11.5px; margin-top:7px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .ab-bal.match{color:var(--go)} .ab-bal.diff{color:var(--wait)}
+  .funders{font-size:11px; color:var(--muted); margin-top:2px}
+  .funders b{color:var(--text); font-weight:650}
+  .mismatch{color:var(--stop); font-weight:600}
+  .due{background:var(--accent-soft); border:1px solid #C3CEF2; color:#2C3968;
+        border-radius:10px; padding:11px 14px; font-size:12.5px; margin-bottom:16px}
+  .due b{font-weight:700}
+  .due-list{display:flex; gap:6px; flex-wrap:wrap; margin-top:9px}
+  .due-chip{border:1px solid #B9C6EF; background:var(--card); color:var(--accent);
+        border-radius:999px; padding:4px 10px; font-size:11.5px; font-weight:650;
+        cursor:pointer; font-family:inherit}
+  .due-chip:hover{background:#fff; border-color:var(--accent)}
+  .due-n{background:var(--accent); color:#fff; border-radius:999px; font-size:10px;
+        padding:1px 6px; margin-left:5px; font-weight:700}
+  .chk-btn{border:1px solid var(--line-strong); background:var(--card); color:var(--accent);
+        border-radius:7px; padding:3px 9px; font-size:10.5px; font-weight:650;
+        cursor:pointer; font-family:inherit; white-space:nowrap}
+  .chk-btn:hover{border-color:var(--accent); background:var(--accent-soft)}
+  .chk-btn.copied{background:var(--go-soft); border-color:#A9D5BC; color:var(--go)}
+  .lock-chip{font-size:11px; color:var(--muted); background:#EDEFF4;
+        border:1px solid var(--line); border-radius:999px; padding:2px 8px; white-space:nowrap}
+  .locked-amt{color:var(--text); font-weight:650; padding-right:9px}
+  .applied-btn.locked{background:#EDEFF4; border-color:var(--line-strong); color:#5B6376}
+  .applied-btn.locked:hover{border-color:var(--line-strong); color:#5B6376}
+  .panel-foot{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-top:10px}
+  .panel-foot span{font-size:12px; color:var(--muted); padding:5px 11px;
+        border-radius:999px; border:1px solid var(--line); background:var(--card)}
+  .panel-foot b{color:var(--text); font-weight:750}
+  .panel-foot .you-chip{background:var(--accent-soft); border-color:#B9C6EF; color:#33406B}
+  .panel-foot .you-chip b{color:var(--accent)}
+  .panel-foot .pct{border:none; padding:0; font-size:11px; color:var(--accent); opacity:.8}
+  .panel-foot .off-chip{background:var(--stop-soft); border-color:#EEC3BD; color:#8A2A20; font-weight:600}
+  .you-tag{font-size:9.5px; font-weight:800; letter-spacing:.05em; color:#fff;
+        background:var(--accent); border-radius:4px; padding:1px 5px; margin-left:7px;
+        vertical-align:1px}
   .onboard-card{background:var(--card); border-radius:14px; padding:26px; width:100%;
-        max-width:380px; box-shadow:0 20px 50px rgba(0,0,0,.35)}
+        max-width:420px; box-shadow:0 20px 50px rgba(0,0,0,.35);
+        max-height:86vh; overflow-y:auto}
   .onboard-card h2{margin:0 0 6px; font-size:18px; letter-spacing:-.01em}
   .onboard-card .sub{margin:0 0 18px; color:var(--muted); font-size:12.5px; line-height:1.5}
   .onboard-card label{display:block; font-size:12px; font-weight:600; color:var(--muted);
@@ -134,26 +268,91 @@
         font-family:inherit; color:var(--text)}
   .onboard-card input:focus{outline:2px solid var(--accent); border-color:var(--accent)}
   .onboard-error{color:var(--stop); font-size:12px; min-height:16px; margin:-4px 0 12px}
-  .onboard-actions{display:flex; gap:8px}
+  .onboard-actions{display:flex; gap:8px; flex-wrap:wrap}
+  .modal-head{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+  .modal-head h2{margin:0}
+  .modal-head .eye{margin-left:auto}
+  .act.eye{white-space:nowrap}
+  .act.eye[aria-pressed="true"]{background:var(--ink); color:#fff; border-color:var(--ink)}
+  .act.sm{padding:4px 9px; font-size:11px}
+  .modal-head .x{margin-left:8px; border:none; background:none; color:var(--muted);
+        font-size:18px; cursor:pointer; line-height:1; padding:2px 4px}
+  .modal-head .x:hover{color:var(--text)}
+  .prow{display:flex; align-items:center; gap:10px; padding:10px 0;
+        border-bottom:1px solid var(--line)}
+  .prow:last-of-type{border-bottom:none}
+  .prow .pmeta{min-width:0; flex:1}
+  .prow .pname{font-weight:650; font-size:13.5px}
+  .prow .ppan{font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums}
+  .prow .pstat{font-size:11px; color:var(--muted); margin-top:2px}
+  .linkbtn{border:none; background:none; color:var(--accent); font-size:11.5px;
+        cursor:pointer; font-weight:600; padding:2px 4px; font-family:inherit}
+  .linkbtn:hover{text-decoration:underline}
+  .linkbtn.del{color:var(--stop)}
+  .empty-people{color:var(--muted); font-size:12.5px; padding:12px 0}
 </style>
 </head>
 <body>
 
+<!-- add / edit person -->
 <div class="onboard-overlay" id="onboardOverlay">
   <div class="onboard-card">
-    <h2>Welcome to IPO Watch</h2>
-    <p class="sub">Enter your name and PAN to personalize your tracker. Stored only on
+    <h2 id="obTitle">Add a person</h2>
+    <p class="sub" id="obSub">Name and PAN of someone you apply for. Stored only on
       this device (browser localStorage) — never sent anywhere.</p>
     <label>Full name
-      <input type="text" id="obName" placeholder="e.g. Anurag Rajput" autocomplete="name">
+      <input type="text" id="obName" placeholder="e.g. Anurag Rajput" autocomplete="off">
     </label>
     <label>PAN card number
       <input type="text" id="obPan" placeholder="ABCDE1234F" maxlength="10" autocomplete="off">
     </label>
     <div class="onboard-error" id="obError"></div>
     <div class="onboard-actions">
-      <button class="act refresh" id="obSubmit">Continue</button>
+      <button class="act refresh" id="obSubmit">Save person</button>
       <button class="act" id="obCancel" style="display:none">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- people manager -->
+<div class="onboard-overlay" id="peopleOverlay">
+  <div class="onboard-card">
+    <div class="modal-head">
+      <h2>People</h2>
+      <button class="act eye sm" data-eye="1" aria-pressed="false">👁 Show PANs</button>
+      <button class="x" id="peopleClose" title="Close">&#10005;</button>
+    </div>
+    <p class="sub">Everyone whose PAN you apply from. Add each family member or friend
+      once, then tick them on any IPO and record what they put in.</p>
+    <div id="peopleList"></div>
+    <div class="onboard-actions" style="margin-top:16px">
+      <button class="act refresh" id="addPerson">+ Add person</button>
+      <button class="act" id="peopleDone">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- who is applying for this IPO -->
+<div class="onboard-overlay" id="applyOverlay">
+  <div class="onboard-card wide">
+    <div class="modal-head">
+      <h2 id="apTitle">Who is applying?</h2>
+      <button class="act eye sm" data-eye="1" aria-pressed="false">👁 Show PANs</button>
+      <button class="x" id="apClose" title="Close">&#10005;</button>
+    </div>
+    <p class="sub" id="apSub"></p>
+    <div id="apList"></div>
+    <button class="act" id="apAddNew" style="margin-top:4px">+ Someone new</button>
+    <div class="pick-tot">
+      <span id="apCount">Nobody selected</span>
+      <span class="big num" id="apTotal">₹0</span>
+    </div>
+    <div class="pick-check" id="apCheck"></div>
+    <div class="onboard-actions" style="margin-top:14px">
+      <button class="act refresh" id="apNext">Next &rarr;</button>
+      <button class="act refresh" id="apSave" style="display:none">Save</button>
+      <button class="act" id="apBack" style="display:none">&larr; Back</button>
+      <button class="act" id="apCancel">Cancel</button>
     </div>
   </div>
 </div>
@@ -162,14 +361,14 @@
   <div class="mast">
     <div class="brand">
       <h1>IPO Watch</h1>
-      <p>Personal application tracker &middot; Indian primary market</p>
+      <p>Multi-applicant tracker &middot; Indian primary market</p>
       <p class="welcome" id="welcomeMsg" style="display:none"></p>
       <div class="updated"><span class="dot off" id="livedot"></span><span id="livemsg">Loading live GMP…</span></div>
     </div>
     <div class="hero">
-      <div class="label">Money blocked if you apply to selected</div>
+      <div class="label">Money blocked across all applications</div>
       <div class="amt num" id="total">₹0</div>
-      <div class="sub" id="picksub">0 IPOs selected</div>
+      <div class="sub" id="picksub">No applications yet</div>
     </div>
   </div>
 </header>
@@ -184,51 +383,55 @@
     </div>
     <div class="spacer"></div>
     <button class="act refresh" id="refresh">Refresh GMP</button>
-    <button class="act" id="selGo">Select all “Apply”</button>
-    <button class="act" id="clearSel">Clear selection</button>
+    <button class="act eye" data-eye="1" aria-pressed="false">👁 Show PANs</button>
+    <button class="act" id="managePeople">Manage people</button>
+    <button class="act danger" id="clearApps">Clear all applications</button>
   </div>
 
   <div class="fail" id="fail"></div>
 
   <div class="note">
-    Overlapping windows can’t share money. In UPI/ASBA IPOs your funds stay <b>blocked</b>
-    until ~2 working days after each close, so IPOs open on the same days need their cash
-    <b>at the same time</b>. The counter above sums everything you select — treat it as the
-    peak you must keep free, not a recyclable pot.
+    Overlapping windows can’t share money. In UPI/ASBA IPOs each applicant’s funds stay
+    <b>blocked</b> until ~2 working days after the close, so IPOs open on the same days need
+    their cash <b>at the same time</b> — per PAN. The counter above sums every contribution
+    you have recorded: treat it as the peak the group must keep free, not a recyclable pot.
   </div>
 
+  <div id="due-host"></div>
   <div id="table-host"></div>
+  <div id="summary-host"></div>
   <div id="history-host"></div>
 </div>
 
 <footer>
   <p><b>Live GMP:</b> figures are pulled from a <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">gmp.json</code> file that a scheduled job refreshes every few hours, sourced from ipowatch.in.
   Press <b>Refresh GMP</b> to re-read the latest. Open this page from your GitHub Pages URL (not the local file) for live data.</p>
-  <p><b>GMP is unofficial</b> grey-market data — a rough sentiment signal, not a forecast, and sources disagree. Application amounts are 1 lot at the upper band (cut-off). None of this is financial advice.</p>
+  <p><b>Everything stays on this device.</b> Names, PANs and contribution amounts live in your browser’s localStorage only — nothing is uploaded. Clearing site data wipes them.</p>
+  <p><b>GMP is unofficial</b> grey-market data — a rough sentiment signal, not a forecast, and sources disagree. Default contribution is 1 lot at the upper band (cut-off). None of this is financial advice.</p>
 </footer>
 
 <script>
 const GMP_URL = "gmp.json";
 
 const DEFAULTS = [
-  {b:"7–9 Sep",   n:"Pranav Constructions",  gmp:"29%",  rup:36,  band:"₹118–124", app:14880, quota:"45%", f:4, v:4, l:5, view:"Apply",          vc:"go",   alloc:null},
-  {b:"8–10 Sep",  n:"Kanohar Electricals",   gmp:"30%",  rup:190, band:"₹601–632", app:14536, quota:"35%", f:5, v:3, l:5, view:"Apply",          vc:"go",   alloc:null},
-  {b:"8–10 Sep",  n:"Prasol Chemicals",      gmp:"16%",  rup:110, band:"₹643–676", app:14872, quota:"35%", f:4, v:3, l:4, view:"Cautious Apply", vc:"wait", alloc:null},
-  {b:"8–10 Sep",  n:"Glass Wall Systems",    gmp:"18%",  rup:32,  band:"₹172–182", app:14924, quota:"35%", f:4, v:2, l:3, view:"Skip",           vc:"wait", alloc:null},
-  {b:"9–11 Sep",  n:"Rentomojo",             gmp:"35%",  rup:140, band:"₹384–404", app:14948, quota:"10%", f:5, v:3, l:5, view:"Apply",          vc:"go",   alloc:null},
-  {b:"9–11 Sep",  n:"Karamtara Engineering", gmp:"20%",  rup:50,  band:"₹241–254", app:14986, quota:"35%", f:5, v:4, l:4, view:"Strong Apply",   vc:"go",   alloc:null},
-  {b:"9–11 Sep",  n:"LCC Projects",          gmp:"15%",  rup:22,  band:"₹139–146", app:14892, quota:"35%", f:5, v:4, l:4, view:"Apply",          vc:"go",   alloc:null},
-  {b:"9–11 Sep",  n:"Asset Reconstruction",  gmp:"TBD",  rup:null,band:"₹132–139", app:14873, quota:"35%", f:5, v:4, l:2, view:"Long-term",      vc:"wait", alloc:null},
-  {b:"9–11 Sep",  n:"Manipal Payment",       gmp:"7%",   rup:25,  band:"₹322–339", app:14916, quota:"35%", f:-1,v:-1,l:3, view:"Wait",           vc:"wait", alloc:null},
-  {b:"9–11 Sep",  n:"Steamhouse India",      gmp:"TBD",  rup:null,band:"₹77–81",   app:14900, quota:"35%", f:3, v:-1,l:2, view:"Skip",           vc:"stop", alloc:null},
-  {b:"10–15 Sep", n:"Veegaland Developers",  gmp:"17%",  rup:24,  band:"₹130–140", app:14980, quota:"35%", f:4, v:3, l:4, view:"Watch",          vc:"wait", alloc:null},
-  {b:"11–16 Sep", n:"Manika Plastech",       gmp:"TBD",  rup:null,band:"₹40–43",   app:0,     quota:"35%", f:3, v:-1,l:2, view:"Wait",           vc:"wait", alloc:null},
-  {b:"21–23 Sep", n:"NSE",                   gmp:"TBD",  rup:null,band:"TBD",      app:0,     quota:"TBD", f:5, v:-1,l:5, view:"WAIT",           vc:"wait", alloc:null},
+  {b:"7–9 Sep",   n:"Pranav Constructions",  gmp:"29%",  rup:36,  band:"₹118–124", app:14880, quota:"45%", f:4, v:4, l:5, view:"Apply",          vc:"go"},
+  {b:"8–10 Sep",  n:"Kanohar Electricals",   gmp:"30%",  rup:190, band:"₹601–632", app:14536, quota:"35%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
+  {b:"8–10 Sep",  n:"Prasol Chemicals",      gmp:"16%",  rup:110, band:"₹643–676", app:14872, quota:"35%", f:4, v:3, l:4, view:"Cautious Apply", vc:"wait"},
+  {b:"8–10 Sep",  n:"Glass Wall Systems",    gmp:"18%",  rup:32,  band:"₹172–182", app:14924, quota:"35%", f:4, v:2, l:3, view:"Skip",           vc:"wait"},
+  {b:"9–11 Sep",  n:"Rentomojo",             gmp:"35%",  rup:140, band:"₹384–404", app:14948, quota:"10%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
+  {b:"9–11 Sep",  n:"Karamtara Engineering", gmp:"20%",  rup:50,  band:"₹241–254", app:14986, quota:"35%", f:5, v:4, l:4, view:"Strong Apply",   vc:"go"},
+  {b:"9–11 Sep",  n:"LCC Projects",          gmp:"15%",  rup:22,  band:"₹139–146", app:14892, quota:"35%", f:5, v:4, l:4, view:"Apply",          vc:"go"},
+  {b:"9–11 Sep",  n:"Asset Reconstruction",  gmp:"TBD",  rup:null,band:"₹132–139", app:14873, quota:"35%", f:5, v:4, l:2, view:"Long-term",      vc:"wait"},
+  {b:"9–11 Sep",  n:"Manipal Payment",       gmp:"7%",   rup:25,  band:"₹322–339", app:14916, quota:"35%", f:-1,v:-1,l:3, view:"Wait",           vc:"wait"},
+  {b:"9–11 Sep",  n:"Steamhouse India",      gmp:"TBD",  rup:null,band:"₹77–81",   app:14900, quota:"35%", f:3, v:-1,l:2, view:"Skip",           vc:"stop"},
+  {b:"10–15 Sep", n:"Veegaland Developers",  gmp:"17%",  rup:24,  band:"₹130–140", app:14980, quota:"35%", f:4, v:3, l:4, view:"Watch",          vc:"wait"},
+  {b:"11–16 Sep", n:"Manika Plastech",       gmp:"TBD",  rup:null,band:"₹40–43",   app:0,     quota:"35%", f:3, v:-1,l:2, view:"Wait",           vc:"wait"},
+  {b:"21–23 Sep", n:"NSE",                   gmp:"TBD",  rup:null,band:"TBD",      app:0,     quota:"TBD", f:5, v:-1,l:5, view:"WAIT",           vc:"wait"},
 ];
 
 // Registrar handling each IPO's allotment — from each company's IPO detail
 // page (registrar contact block). url is the registrar's own generic
-// "check status" tool: select your IPO there, then enter PAN.
+// "check status" tool: select your IPO there, then enter each PAN.
 const KFIN  = {registrar:"KFin Technologies",  url:"https://ipostatus.kfintech.com/"};
 const MUFG  = {registrar:"MUFG Intime",        url:"https://in.mpms.mufg.com/Initial_Offer/public-issues.html"};
 const REGISTRARS = {
@@ -247,89 +450,149 @@ const REGISTRARS = {
   "NSE":                   MUFG,
 };
 
-const SKEY = "ipoWatch.v3";
-let savedPicks = [];
-let data = load();
-let filter = "all";
-const picks = new Set(savedPicks.filter(id=> id>=0 && id<data.length));
+const SKEY       = "ipoWatch.v3";            // verdict edits
+const PEOPLE_KEY = "ipoWatch.people.v1";     // [{id,name,pan}]
+const OWNER_KEY  = "ipoWatch.owner.v1";      // which person is "you"
+const APPS_KEY   = "ipoWatch.apps.v1";       // {ipoName: {personId: {amt, alloc}}}
+const OLD_PKEY   = "ipoWatch.profile";       // single-profile format (v1)
+const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 
+let data    = [];
+let people  = [];
+let apps    = {};
+let filter  = "all";
+const open  = new Set();   // IPO names whose applicant panel is expanded
+
+function readJSON(key){
+  try{ return JSON.parse(localStorage.getItem(key)); }catch(e){ return null; }
+}
+function writeJSON(key, val){
+  try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){}
+}
+function newId(){
+  return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+// ---- verdict overrides ----
 function load(){
-  try{
-    const raw = localStorage.getItem(SKEY);
-    if(raw){
-      const saved = JSON.parse(raw);
-      const map = Object.fromEntries((saved.rows||[]).map(r=>[r.n,r]));
-      savedPicks = saved.picks || [];
-      return DEFAULTS.map(d=> map[d.n] ? {...d, view:map[d.n].view, vc:map[d.n].vc, alloc:map[d.n].alloc ?? null} : {...d});
-    }
-  }catch(e){}
+  const saved = readJSON(SKEY);
+  if(saved){
+    const map = Object.fromEntries((saved.rows||[]).map(r=>[r.n,r]));
+    return DEFAULTS.map(d=> map[d.n] ? {...d, view:map[d.n].view, vc:map[d.n].vc} : {...d});
+  }
   return DEFAULTS.map(d=>({...d}));
 }
 function save(){
-  try{
-    const rows = data.map(d=>({n:d.n, view:d.view, vc:d.vc, alloc:d.alloc||null}));
-    localStorage.setItem(SKEY, JSON.stringify({rows, picks:[...picks]}));
-  }catch(e){}
+  writeJSON(SKEY, {rows: data.map(d=>({n:d.n, view:d.view, vc:d.vc}))});
 }
 
-// ---- profile (first-visit onboarding) ----
-const PKEY = "ipoWatch.profile";
-const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+// ---- people + applications ----
+function savePeople(){ writeJSON(PEOPLE_KEY, people); }
+function saveApps(){ writeJSON(APPS_KEY, apps); }
+function personById(id){ return people.find(p=>p.id===id); }
 
-function loadProfile(){
-  try{ return JSON.parse(localStorage.getItem(PKEY)); }catch(e){ return null; }
+// Whoever the page calls "you" — the person added during onboarding unless changed.
+let ownerId = null;
+function loadOwner(){
+  ownerId = localStorage.getItem(OWNER_KEY);
+  if(!ownerId || !personById(ownerId)) ownerId = people.length ? people[0].id : null;
 }
-function saveProfile(p){
-  try{ localStorage.setItem(PKEY, JSON.stringify(p)); }catch(e){}
+function setOwner(pid){
+  ownerId = pid;
+  try{ localStorage.setItem(OWNER_KEY, pid); }catch(e){}
 }
+
+// How much each person put into one IPO, across every application in it.
+function ipoShares(name){
+  const rec = appsFor(name), out = {};
+  Object.keys(rec).forEach(ap=>{
+    const c = contribMap(ap, rec[ap]);
+    Object.keys(c).forEach(k=>{ if(c[k]>0) out[k] = (out[k]||0) + c[k]; });
+  });
+  return out;
+}
+
+// One-time move from the single name+PAN profile to the people list, carrying
+// the old picks and per-IPO allotment across as that person's applications.
+function migrate(){
+  if(localStorage.getItem(PEOPLE_KEY)) return;
+  const old = readJSON(OLD_PKEY);
+  if(!old || !old.name) return;
+  const p = {id:newId(), name:old.name, pan:(old.pan||"").toUpperCase()};
+  people = [p];
+  savePeople();
+  const s = readJSON(SKEY) || {};
+  const byName = Object.fromEntries((s.rows||[]).map(r=>[r.n,r]));
+  const picked = new Set(s.picks||[]);
+  DEFAULTS.forEach((d,i)=>{
+    const alloc = byName[d.n] && byName[d.n].alloc ? byName[d.n].alloc : null;
+    if(picked.has(i) || alloc){
+      apps[d.n] = apps[d.n] || {};
+      apps[d.n][p.id] = {amt: d.app || 0, alloc};
+    }
+  });
+  saveApps();
+}
+
+function appsFor(name){ return apps[name] || {}; }
+
+// Who actually put the money into one application. No `contrib` recorded means
+// the applicant funded all of it themselves.
+function contribMap(applicantPid, a){
+  if(a.contrib && Object.keys(a.contrib).length) return {...a.contrib};
+  return {[applicantPid]: a.amt || 0};
+}
+function contribTotal(c){ return Object.values(c||{}).reduce((s,v)=>s+(v||0), 0); }
+function isSplit(applicantPid, a){
+  if(!a.contrib) return false;
+  const ks = Object.keys(a.contrib).filter(k=> a.contrib[k] > 0);
+  return ks.length > 1 || (ks.length === 1 && ks[0] !== applicantPid);
+}
+function funderText(applicantPid, a){
+  const c = contribMap(applicantPid, a);
+  const parts = Object.keys(c).filter(k=> c[k] > 0 && personById(k))
+    .map(k=> `<b>${escapeHTML(personById(k).name.split(" ")[0])}</b> ${money(c[k])}`)
+    .join(" &middot; ");
+  const tot = contribTotal(c), diff = tot - (a.amt||0);
+  return diff===0 ? parts
+    : `${parts} <span class="mismatch">— split adds to ${money(tot)},
+        ${diff<0?"short by":"over by"} ${money(Math.abs(diff))}</span>`;
+}
+function applicantIds(name){
+  return people.filter(p=> appsFor(name)[p.id]).map(p=>p.id);
+}
+function setApplied(name, pid, on, amt){
+  if(on){
+    apps[name] = apps[name] || {};
+    if(!apps[name][pid]) apps[name][pid] = {amt: amt||0, alloc:null};
+  }else if(apps[name]){
+    delete apps[name][pid];
+    if(!Object.keys(apps[name]).length) delete apps[name];
+  }
+  saveApps();
+}
+
 function escapeHTML(s){
-  return s.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function maskPan(pan){
   return pan && pan.length>=4 ? "•••••"+pan.slice(-4) : (pan||"");
 }
-function renderWelcome(){
-  const p = loadProfile();
-  const el = document.getElementById("welcomeMsg");
-  if(p && p.name){
-    el.style.display = "block";
-    el.innerHTML = `Welcome, <b>${escapeHTML(p.name)}</b> &middot; PAN ${maskPan(p.pan)} &middot; <a href="#" id="editProfile">edit</a>`;
-    document.getElementById("editProfile").addEventListener("click", e=>{ e.preventDefault(); openOnboard(p); });
-  }else{
-    el.style.display = "none";
-  }
+// PANs are masked unless the eye is on. Deliberately not persisted — every
+// load starts hidden, so a shoulder-surfer never inherits a revealed page.
+let showPans = false;
+function panText(pan){ return showPans ? (pan||"") : maskPan(pan); }
+function togglePans(){
+  showPans = !showPans;
+  document.querySelectorAll("[data-eye]").forEach(b=>{
+    b.textContent = showPans ? "🙈 Hide PANs" : "👁 Show PANs";
+    b.setAttribute("aria-pressed", showPans);
+  });
+  render();
+  if(document.getElementById("peopleOverlay").classList.contains("open")) renderPeopleList();
+  if(document.getElementById("applyOverlay").classList.contains("open")) renderApply();
 }
-function openOnboard(existing){
-  const overlay = document.getElementById("onboardOverlay");
-  document.getElementById("obName").value = existing?.name || "";
-  document.getElementById("obPan").value = existing?.pan || "";
-  document.getElementById("obError").textContent = "";
-  document.getElementById("obCancel").style.display = existing ? "inline-block" : "none";
-  overlay.style.display = "flex";
-  document.getElementById("obName").focus();
-}
-function closeOnboard(){
-  document.getElementById("onboardOverlay").style.display = "none";
-}
-document.getElementById("obPan").addEventListener("input", e=>{
-  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
-});
-document.getElementById("obSubmit").addEventListener("click", ()=>{
-  const name = document.getElementById("obName").value.trim();
-  const pan = document.getElementById("obPan").value.trim().toUpperCase();
-  const err = document.getElementById("obError");
-  if(!name){ err.textContent = "Please enter your name."; return; }
-  if(!PAN_RE.test(pan)){ err.textContent = "PAN should look like ABCDE1234F (5 letters, 4 digits, 1 letter)."; return; }
-  saveProfile({name, pan});
-  closeOnboard();
-  renderWelcome();
-});
-document.getElementById("obCancel").addEventListener("click", closeOnboard);
-document.getElementById("onboardOverlay").addEventListener("keydown", e=>{
-  if(e.key==="Enter"){ e.preventDefault(); document.getElementById("obSubmit").click(); }
-});
-
-function money(n){ return "₹" + n.toLocaleString("en-IN"); }
+function money(n){ return "₹" + (n||0).toLocaleString("en-IN"); }
 function starHTML(k){
   if(k<0) return '<span class="qmark">?</span>';
   let s=""; for(let i=1;i<=5;i++) s += `<span class="${i<=k?'star-on':'star-off'}">★</span>`;
@@ -337,8 +600,163 @@ function starHTML(k){
 }
 function gmpClass(g){ return g==="TBD"?"tbd": g==="0%"?"zero":"pos"; }
 function vClass(vc){ return vc==="go"?"v-go":vc==="stop"?"v-stop":"v-wait"; }
+function allocClass(a){ return a==="allotted"?"v-go":a==="not-allotted"?"v-stop":"v-wait"; }
 
-// ---- allotment status ----
+// Once an IPO closes, who applied and what they put in are settled facts — only the
+// allotment result still moves. Recorded IPOs lock; an empty one stays open so a past
+// IPO can still be entered late. `unlocked` is a deliberate, session-only override.
+const unlocked = new Set();
+function isLocked(d){
+  return hasClosed(d.b) && applicantIds(d.n).length > 0 && !unlocked.has(d.n);
+}
+
+// ---- header line ----
+function renderWelcome(){
+  const el = document.getElementById("welcomeMsg");
+  if(!people.length){ el.style.display="none"; return; }
+  el.style.display = "block";
+  const names = people.map(p=>`${escapeHTML(p.name)} <span style="color:#7C859B">${panText(p.pan)}</span>`).join(" &middot; ");
+  el.innerHTML = `Applying for: ${names} &middot; <a href="#" id="editPeople">manage</a>`;
+  document.getElementById("editPeople").addEventListener("click", e=>{ e.preventDefault(); openPeople(); });
+}
+
+// ---- person add/edit modal ----
+let editingId = null;
+let onPersonAdded = null;   // set by the picker so a new person is ticked at once
+function openPersonForm(id){
+  editingId = id || null;
+  const p = id ? personById(id) : null;
+  document.getElementById("obTitle").textContent = p ? "Edit person" : "Add a person";
+  document.getElementById("obSub").textContent = people.length || p
+    ? "Name and PAN of someone you apply for. Stored only on this device (browser localStorage) — never sent anywhere."
+    : "Start with yourself. You can add more people (family, friends) any time — each one applies with their own PAN.";
+  document.getElementById("obName").value = p ? p.name : "";
+  document.getElementById("obPan").value  = p ? p.pan  : "";
+  document.getElementById("obError").textContent = "";
+  document.getElementById("obCancel").style.display = people.length ? "inline-block" : "none";
+  document.getElementById("obSubmit").textContent = p ? "Save changes" : "Add person";
+  document.getElementById("onboardOverlay").classList.add("open");
+  document.getElementById("obName").focus();
+}
+function closePersonForm(){
+  document.getElementById("onboardOverlay").classList.remove("open");
+  editingId = null; onPersonAdded = null;
+}
+document.getElementById("obPan").addEventListener("input", e=>{
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+});
+document.getElementById("obSubmit").addEventListener("click", ()=>{
+  const name = document.getElementById("obName").value.trim();
+  const pan  = document.getElementById("obPan").value.trim().toUpperCase();
+  const err  = document.getElementById("obError");
+  if(!name){ err.textContent = "Please enter a name."; return; }
+  if(!PAN_RE.test(pan)){ err.textContent = "PAN should look like ABCDE1234F (5 letters, 4 digits, 1 letter)."; return; }
+  const clash = people.find(p=> p.pan===pan && p.id!==editingId);
+  if(clash){ err.textContent = `That PAN is already saved as ${clash.name}.`; return; }
+  if(editingId){
+    const p = personById(editingId);
+    p.name = name; p.pan = pan;
+  }else{
+    const np = {id:newId(), name, pan};
+    people.push(np);
+    if(!ownerId) setOwner(np.id);
+    if(onPersonAdded){ const cb = onPersonAdded; onPersonAdded = null; cb(np.id); }
+  }
+  savePeople();
+  closePersonForm();
+  renderWelcome();
+  renderPeopleList();
+  render();
+});
+document.getElementById("obCancel").addEventListener("click", closePersonForm);
+document.getElementById("onboardOverlay").addEventListener("keydown", e=>{
+  if(e.key==="Enter"){ e.preventDefault(); document.getElementById("obSubmit").click(); }
+  if(e.key==="Escape" && people.length) closePersonForm();
+});
+
+// ---- people manager modal ----
+function openPeople(){
+  renderPeopleList();
+  document.getElementById("peopleOverlay").classList.add("open");
+}
+function closePeople(){ document.getElementById("peopleOverlay").classList.remove("open"); }
+function personStats(pid){
+  let ipos=0, blocked=0, putIn=0, got=0, no=0, pend=0;
+  data.forEach(d=>{
+    const rec = appsFor(d.n);
+    const a = rec[pid];
+    if(a){                                   // applications in their own name
+      ipos++; blocked += a.amt||0;
+      if(a.alloc==="allotted") got++;
+      else if(a.alloc==="not-allotted") no++;
+      else pend++;
+    }
+    Object.keys(rec).forEach(ap=>{           // money they put in, into anyone's application
+      putIn += contribMap(ap, rec[ap])[pid] || 0;
+    });
+  });
+  return {ipos, blocked, putIn, got, no, pend};
+}
+function renderPeopleList(){
+  const host = document.getElementById("peopleList");
+  if(!people.length){
+    host.innerHTML = `<div class="empty-people">No people yet — add the first one below.</div>`;
+    return;
+  }
+  host.innerHTML = people.map(p=>{
+    const s = personStats(p.id);
+    return `<div class="prow">
+      <div class="pmeta">
+        <div class="pname">${escapeHTML(p.name)}${p.id===ownerId?'<span class="you-tag">YOU</span>':""}</div>
+        <div class="ppan">${escapeHTML(panText(p.pan))}</div>
+        <div class="pstat">${s.ipos} IPO${s.ipos===1?"":"s"} in their name &middot;
+          ${money(s.putIn)} put in</div>
+      </div>
+      ${p.id===ownerId?"":`<button class="linkbtn" data-pact="mine" data-pid="${p.id}" title="Count this person's money as your share">This&nbsp;is&nbsp;me</button>`}
+      <button class="linkbtn" data-pact="apply-go" data-pid="${p.id}" title="Add this person to every IPO currently marked Apply">Apply&nbsp;all</button>
+      <button class="linkbtn" data-pact="edit" data-pid="${p.id}">Edit</button>
+      <button class="linkbtn del" data-pact="del" data-pid="${p.id}">Remove</button>
+    </div>`;
+  }).join("");
+  host.querySelectorAll("[data-pact]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const pid = b.dataset.pid, p = personById(pid);
+      if(b.dataset.pact === "mine"){ setOwner(pid); renderPeopleList(); renderWelcome(); render(); return; }
+      if(b.dataset.pact === "edit"){ openPersonForm(pid); return; }
+      if(b.dataset.pact === "del"){
+        const s = personStats(pid);
+        const warn = s.ipos ? `\n\nThis also removes their ${s.ipos} recorded application${s.ipos===1?"":"s"}.` : "";
+        if(!confirm(`Remove ${p.name}?${warn}`)) return;
+        people = people.filter(x=>x.id!==pid);
+        Object.keys(apps).forEach(n=>{
+          delete apps[n][pid];
+          if(!Object.keys(apps[n]).length) delete apps[n];
+        });
+        savePeople(); saveApps();
+        if(pid === ownerId){ ownerId = null; loadOwner(); if(ownerId) setOwner(ownerId); }
+        renderPeopleList(); renderWelcome(); render();
+        return;
+      }
+      if(b.dataset.pact === "apply-go"){
+        let n = 0;
+        data.forEach(d=>{
+          if(d.vc==="go" && d.app>0 && !appsFor(d.n)[pid]){ setApplied(d.n, pid, true, d.app); n++; }
+        });
+        renderPeopleList(); render();
+        if(!n) alert(`${p.name} is already on every IPO marked “Apply”.`);
+      }
+    });
+  });
+}
+document.getElementById("managePeople").addEventListener("click", openPeople);
+document.getElementById("peopleClose").addEventListener("click", closePeople);
+document.getElementById("peopleDone").addEventListener("click", closePeople);
+document.getElementById("addPerson").addEventListener("click", ()=> openPersonForm(null));
+document.getElementById("peopleOverlay").addEventListener("keydown", e=>{
+  if(e.key==="Escape") closePeople();
+});
+
+// ---- allotment timing ----
 const MONTHS = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
 function batchCloseDate(b){
   const m = b.match(/[–-]\s*(\d{1,2})\s+([A-Za-z]+)/);
@@ -352,23 +770,416 @@ function hasClosed(b){
   const d = batchCloseDate(b);
   return d ? Date.now() > d.getTime() : false;
 }
-function allocClass(a){ return a==="allotted"?"v-go":a==="not-allotted"?"v-stop":"v-wait"; }
-function allocCell(d, id){
-  if(!hasClosed(d.b)) return `<span class="qmark" title="Applications still open">Not out yet</span>`;
-  const reg = REGISTRARS[d.n];
-  const link = reg
+function registrarLink(name){
+  const reg = REGISTRARS[name];
+  return reg
     ? `<a class="alloc-link" href="${reg.url}" target="_blank" rel="noopener">Check @ ${reg.registrar} ↗</a>`
     : `<a class="alloc-link" href="https://www.bseindia.com/investors/appli_check.aspx" target="_blank" rel="noopener">Check on BSE ↗</a>`;
-  return `<div class="alloc-cell">
-    ${link}
-    <select class="alloc-select ${allocClass(d.alloc)}" data-id="${id}" title="Enter your PAN on the registrar page, then record the result here">
-      <option value=""            ${!d.alloc?"selected":""}>Pending</option>
-      <option value="allotted"    ${d.alloc==="allotted"?"selected":""}>Allotted</option>
-      <option value="not-allotted" ${d.alloc==="not-allotted"?"selected":""}>Not allotted</option>
-    </select>
+}
+function allocSelect(id, pid, alloc){
+  return `<select class="alloc-select ${allocClass(alloc)}" data-id="${id}" data-pid="${pid}"
+      title="Enter this PAN on the registrar page, then record the result here">
+    <option value=""             ${!alloc?"selected":""}>Pending</option>
+    <option value="allotted"     ${alloc==="allotted"?"selected":""}>Allotted</option>
+    <option value="not-allotted" ${alloc==="not-allotted"?"selected":""}>Not allotted</option>
+  </select>`;
+}
+function allocSummary(d){
+  const ids = applicantIds(d.n);
+  if(!ids.length) return `<span class="qmark">—</span>`;
+  if(!hasClosed(d.b))
+    return `<div class="alloc-cell"><span class="qmark" title="Applications still open">Not out yet</span></div>`;
+  const rec = appsFor(d.n);
+  const g = ids.filter(i=>rec[i].alloc==="allotted").length;
+  const s = ids.filter(i=>rec[i].alloc==="not-allotted").length;
+  const p = ids.length - g - s;
+  const bits = [];
+  if(g) bits.push(`<b class="g">${g}</b> allotted`);
+  if(s) bits.push(`<b class="s">${s}</b> not`);
+  if(p) bits.push(`<b>${p}</b> pending`);
+  return `<div class="alloc-cell">${registrarLink(d.n)}
+    <span class="tallies">${bits.join(" &middot; ")}</span></div>`;
+}
+
+// ---- per-IPO applicant panel: only the people who actually applied ----
+function panelHTML(d, id){
+  const rec = appsFor(d.n);
+  const ids = applicantIds(d.n);
+  const closed = hasClosed(d.b);
+  const locked = isLocked(d);
+  const total = ids.reduce((t,i)=>t+(rec[i].amt||0),0);
+  if(!ids.length){
+    return `<div class="panel"><div class="panel-empty">
+      Nobody has applied for <b>${escapeHTML(d.n)}</b> yet.
+      <button class="act refresh" data-ask="${id}">Who is applying?</button>
+    </div></div>`;
+  }
+  let h = `<div class="panel">
+    <div class="panel-head">
+      <b>${ids.length}</b> ${ids.length===1?"person":"people"} applied for
+      <b>${escapeHTML(d.n)}</b> &middot; 1 lot at cut-off is
+      <b class="num">${d.app>0?money(d.app):"TBD"}</b>
+      <span class="ph-right">total <b class="num">${money(total)}</b>
+        &middot; ${locked
+          ? `<span class="lock-chip">🔒 Closed — record allotment only</span>
+             <button class="linkbtn" data-unlock="${id}">Unlock to edit</button>`
+          : `<button class="linkbtn" data-ask="${id}">Edit who applied</button>${
+              closed?` <button class="linkbtn" data-relock="${id}">Re-lock</button>`:""}`}</span>
+    </div>
+    <div class="tablewrap"><table class="ptable"><thead><tr>
+      <th>Person</th><th class="hide">PAN</th>
+      <th class="r">Contribution ₹</th><th class="c">Allotment</th>
+    </tr></thead><tbody>`;
+  ids.forEach(pid=>{
+    const p = personById(pid), a = rec[pid];
+    const split = isSplit(pid, a);
+    h += `<tr class="on">
+      <td class="name">${escapeHTML(p.name)}<div class="pan-mini num">${panText(p.pan)}</div>
+        ${split?`<div class="funders">funded by ${funderText(pid, a)}</div>`:""}</td>
+      <td class="hide num">${escapeHTML(panText(p.pan))}</td>
+      <td class="r">${locked
+        ? `<span class="num locked-amt">${money(a.amt||0)}</span>`
+        : `<input class="amt-in num" type="text" inputmode="numeric"
+            data-id="${id}" data-pid="${pid}"
+            value="${a.amt||0}" placeholder="${d.app||0}">`}</td>
+      <td class="c">${!closed ? '<span class="qmark">Not out yet</span>'
+        : `<div class="alloc-cell" style="align-items:center;gap:5px">
+             ${allocSelect(id, pid, a.alloc)}
+             ${!a.alloc ? `<button class="chk-btn" data-chk="${id}" data-pid="${pid}"
+                 title="Copy ${escapeHTML(p.name)}’s PAN and open ${REGISTRARS[d.n]?REGISTRARS[d.n].registrar:"the registrar"}"
+                 >Copy PAN &amp; check ↗</button>` : ""}
+           </div>`}</td>
+    </tr>`;
+  });
+  h += `<tr><td class="name" style="color:var(--muted);font-weight:600">Total applied</td>
+      <td class="hide"></td>
+      <td class="r num" style="font-weight:750">${money(total)}</td>
+      <td class="c"></td></tr>`;
+  h += `</tbody></table></div>${sharesHTML(d, total)}</div>`;
+  return h;
+}
+
+// Who this IPO's money actually came from, with your own share called out.
+function sharesHTML(d, total){
+  const sh = ipoShares(d.n);
+  const pids = people.filter(p=> sh[p.id]).map(p=>p.id);
+  if(!pids.length) return "";
+  const mine = sh[ownerId] || 0;
+  const pct  = total ? Math.round(mine / total * 100) : 0;
+  const others = pids.filter(i=> i!==ownerId)
+    .map(i=> `${escapeHTML(personById(i).name.split(" ")[0])} <b class="num">${money(sh[i])}</b>`)
+    .join(" &middot; ");
+  const shareSum = pids.reduce((t,i)=>t+sh[i], 0);
+  const off = shareSum - total;
+  return `<div class="panel-foot">
+    <span class="tot-chip">This IPO in total <b class="num">${money(total)}</b></span>
+    ${ownerId ? `<span class="you-chip">Your share <b class="num">${money(mine)}</b>${
+        total && mine ? ` <span class="pct">${pct}%</span>` : ""}</span>` : ""}
+    ${others ? `<span class="oth-chip">${others}</span>` : ""}
+    ${off ? `<span class="off-chip">Shares add to ${money(shareSum)} —
+        ${off>0?"over":"under"} the applied total by ${money(Math.abs(off))}.
+        Fix it in “Edit who applied”.</span>` : ""}
   </div>`;
 }
 
+// ---- "who is applying" picker: step 1 = whose PAN, step 2 = who funded it ----
+let apId   = null;   // index into data
+let apStep = 1;
+let draft  = {};     // {applicantPid: {amt, contrib:{pid:amt}|null, split:bool}}
+
+function openApply(id){
+  apId = id; apStep = 1;
+  const d = data[id], rec = appsFor(d.n);
+  draft = {};
+  people.forEach(p=>{
+    const a = rec[p.id];
+    if(!a) return;
+    const split = isSplit(p.id, a);
+    draft[p.id] = {amt: a.amt||0, split, contrib: split ? {...a.contrib} : null};
+  });
+  renderApply();
+  document.getElementById("applyOverlay").classList.add("open");
+}
+function closeApply(){
+  document.getElementById("applyOverlay").classList.remove("open");
+  apId = null; apStep = 1; draft = {};
+}
+function draftTotal(){
+  return Object.values(draft).reduce((t,x)=>t+(x.amt||0), 0);
+}
+
+function renderApply(){
+  const d = data[apId];
+  const list = document.getElementById("apList");
+  const ids  = Object.keys(draft);
+  document.getElementById("apTitle").textContent = apStep===1
+    ? `Who is applying for ${d.n}?`
+    : `Who put the money in?`;
+  document.getElementById("apSub").innerHTML = apStep===1
+    ? (people.length
+        ? `Tick whose PAN the application goes in under. One lot at cut-off is
+           <b>${d.app>0?money(d.app):"not announced yet"}</b>.`
+        : `You have no people saved yet — add the first one below.`)
+    : `Set what each application is worth, and if someone else chipped in for it,
+       split it between them. Each split has to add up to that application's amount.`;
+  document.getElementById("apAddNew").style.display = apStep===1 ? "" : "none";
+  document.getElementById("apNext").style.display   = apStep===1 ? "" : "none";
+  document.getElementById("apSave").style.display   = apStep===1 ? "none" : "";
+  document.getElementById("apBack").style.display   = apStep===1 ? "none" : "";
+  document.getElementById("apNext").disabled = !ids.length;
+
+  list.innerHTML = apStep===1 ? step1HTML(d) : step2HTML(d);
+  apStep===1 ? wireStep1() : wireStep2();
+  applyTotals();
+}
+
+// -- step 1 --------------------------------------------------------------
+function step1HTML(d){
+  if(!people.length) return `<div class="empty-people">No people saved yet.</div>`;
+  return people.map(p=>{
+    const on = !!draft[p.id];
+    return `<label class="pick-row ${on?"on":""}">
+      <input type="checkbox" data-pid="${p.id}" ${on?"checked":""}>
+      <span class="who">
+        <span class="nm">${escapeHTML(p.name)}</span>
+        <span class="pn">${escapeHTML(panText(p.pan))}</span>
+      </span>
+    </label>`;
+  }).join("");
+}
+function wireStep1(){
+  document.querySelectorAll("#apList input[type=checkbox]").forEach(cb=>{
+    cb.addEventListener("change", e=>{
+      const pid = e.target.dataset.pid;
+      if(e.target.checked) draft[pid] = {amt: data[apId].app || 0, contrib:null, split:false};
+      else delete draft[pid];
+      renderApply();
+    });
+  });
+}
+
+// -- step 2 --------------------------------------------------------------
+function balMsg(amt, tot){
+  const diff = tot - amt;
+  return diff===0
+    ? `✓ adds up to <b>${money(amt)}</b>`
+    : `Split comes to <b>${money(tot)}</b> — ${diff<0?"short by":"over by"} <b>${money(Math.abs(diff))}</b>`;
+}
+function step2HTML(d){
+  return Object.keys(draft).map(pid=>{
+    const p = personById(pid), x = draft[pid];
+    const c = x.split ? (x.contrib || {}) : null;
+    let h = `<div class="ap-block" data-ap="${pid}">
+      <div class="ab-head">
+        <span class="ab-who">
+          <span class="ab-nm">${escapeHTML(p.name)}</span>
+          <span class="ab-pan">${escapeHTML(panText(p.pan))}</span>
+        </span>
+        <span class="rs" style="color:var(--muted)">₹</span>
+        <input class="ap-amt num" type="text" inputmode="numeric" data-ap="${pid}"
+          value="${x.amt||0}" placeholder="${d.app||0}">
+      </div>`;
+    if(!x.split){
+      h += `<div class="ab-funded">Funded entirely by ${escapeHTML(p.name.split(" ")[0])}
+        <button class="linkbtn" data-split="${pid}">Someone else chipped in →</button></div>`;
+    }else{
+      const tot = contribTotal(c), diff = tot - (x.amt||0);
+      h += `<div class="ab-split">`;
+      people.forEach(q=>{
+        h += `<div class="ab-row">
+          <span class="nm">${escapeHTML(q.name)}${q.id===pid?'<span class="own">APPLICANT</span>':""}</span>
+          <span style="color:var(--muted);font-size:12px">₹</span>
+          <input class="ab-in num" type="text" inputmode="numeric"
+            data-ap="${pid}" data-from="${q.id}" value="${c[q.id]||0}" placeholder="0">
+        </div>`;
+      });
+      h += `<div class="ab-bal ${diff===0?"match":"diff"}">
+        <span class="bal-msg">${balMsg(x.amt||0, tot)}</span>
+        <button class="linkbtn" data-balance="${pid}" ${diff<0?"":"hidden"}
+          >Put the rest on ${escapeHTML(p.name.split(" ")[0])}</button>
+        <button class="linkbtn" data-unsplit="${pid}" style="margin-left:auto">Undo split</button>
+      </div></div>`;
+    }
+    return h + `</div>`;
+  }).join("");
+}
+function wireStep2(){
+  const host = document.getElementById("apList");
+  host.querySelectorAll(".ap-amt").forEach(inp=>{
+    selectOnFocus(inp);
+    inp.addEventListener("input", e=>{
+      const clean = digits(e.target);
+      const x = draft[e.target.dataset.ap];
+      x.amt = clean ? +clean : 0;
+      if(x.split) updateBalance(e.target.dataset.ap); else applyTotals();
+    });
+    inp.addEventListener("keydown", e=>{ if(e.key==="Enter"){e.preventDefault(); e.target.blur();} });
+  });
+  host.querySelectorAll(".ab-in").forEach(inp=>{
+    selectOnFocus(inp);
+    inp.addEventListener("input", e=>{
+      const clean = digits(e.target);
+      const x = draft[e.target.dataset.ap];
+      x.contrib = x.contrib || {};
+      x.contrib[e.target.dataset.from] = clean ? +clean : 0;
+      updateBalance(e.target.dataset.ap);
+    });
+    inp.addEventListener("keydown", e=>{ if(e.key==="Enter"){e.preventDefault(); e.target.blur();} });
+  });
+  host.querySelectorAll("[data-split]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const pid = el.dataset.split, x = draft[pid];
+      x.split = true;
+      x.contrib = {[pid]: x.amt || 0};   // start with the applicant funding all of it
+      renderApply();
+    });
+  });
+  host.querySelectorAll("[data-unsplit]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const x = draft[el.dataset.unsplit];
+      x.split = false; x.contrib = null;
+      renderApply();
+    });
+  });
+  host.querySelectorAll("[data-balance]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const pid = el.dataset.balance, x = draft[pid];
+      const others = contribTotal(x.contrib) - (x.contrib[pid]||0);
+      x.contrib[pid] = Math.max(0, (x.amt||0) - others);
+      renderApply();
+    });
+  });
+}
+function selectOnFocus(el){
+  el.addEventListener("focus", e=> e.target.select());
+  el.addEventListener("mouseup", e=> e.preventDefault());   // Safari re-collapses the selection
+}
+function digits(el){
+  const clean = el.value.replace(/[^0-9]/g,"");
+  if(clean !== el.value) el.value = clean;
+  return clean;
+}
+// live balance line without a full re-render (keeps the caret in the field)
+function updateBalance(pid){
+  const x = draft[pid];
+  const block = document.querySelector(`.ap-block[data-ap="${pid}"]`);
+  const tot = contribTotal(x.contrib), diff = tot - (x.amt||0);
+  if(block){
+    const bal = block.querySelector(".ab-bal");
+    bal.className = "ab-bal " + (diff===0 ? "match" : "diff");
+    bal.querySelector(".bal-msg").innerHTML = balMsg(x.amt||0, tot);
+    block.querySelector("[data-balance]").hidden = (diff >= 0);
+  }
+  applyTotals();
+}
+
+function applyTotals(){
+  const d = data[apId];
+  const ids = Object.keys(draft);
+  const total = draftTotal();
+  document.getElementById("apCount").textContent = ids.length
+    ? `${ids.length} ${ids.length===1?"application":"applications"}`
+    : "Nobody selected";
+  document.getElementById("apTotal").textContent = money(total);
+  const chk = document.getElementById("apCheck");
+  if(!ids.length){ chk.textContent=""; chk.className="pick-check"; return; }
+
+  const unbalanced = ids.filter(pid=>{
+    const x = draft[pid];
+    return x.split && contribTotal(x.contrib) !== (x.amt||0);
+  });
+  if(unbalanced.length){
+    chk.className = "pick-check diff";
+    chk.innerHTML = `${unbalanced.length} split${unbalanced.length===1?" does":"s do"} not
+      add up yet — ${unbalanced.map(pid=>escapeHTML(personById(pid).name.split(" ")[0])).join(", ")}.`;
+    return;
+  }
+  if(!d.app){ chk.textContent=""; chk.className="pick-check"; return; }
+  const expect = ids.length * d.app;
+  if(total === expect){
+    chk.className = "pick-check match";
+    chk.innerHTML = `✓ ${ids.length} × ${money(d.app)} = <b>${money(expect)}</b> — one lot each, adds up.`;
+  }else{
+    const diff = total - expect;
+    chk.className = "pick-check diff";
+    chk.innerHTML = `One lot each would be ${money(expect)} — you are
+      ${diff>0?"over":"under"} by <b>${money(Math.abs(diff))}</b>.`;
+  }
+}
+
+function commitApply(){
+  const d = data[apId], rec = apps[d.n] || {};
+  const next = {};
+  Object.keys(draft).forEach(pid=>{
+    if(!personById(pid)) return;
+    const x = draft[pid];
+    let contrib = null;
+    if(x.split && x.contrib){
+      contrib = {};
+      Object.keys(x.contrib).forEach(k=>{ if(x.contrib[k] > 0 && personById(k)) contrib[k] = x.contrib[k]; });
+      // a "split" that is really just the applicant paying is stored as no split
+      const ks = Object.keys(contrib);
+      if(!ks.length || (ks.length===1 && ks[0]===pid)) contrib = null;
+    }
+    next[pid] = {amt: x.amt || 0, alloc: rec[pid] ? rec[pid].alloc : null, contrib};
+  });
+  if(Object.keys(next).length){ apps[d.n] = next; open.add(d.n); }
+  else { delete apps[d.n]; open.delete(d.n); }
+  saveApps();
+  closeApply();
+  render();
+}
+
+document.getElementById("apNext").addEventListener("click", ()=>{
+  if(!Object.keys(draft).length) return;
+  apStep = 2; renderApply();
+});
+document.getElementById("apBack").addEventListener("click", ()=>{ apStep = 1; renderApply(); });
+document.getElementById("apSave").addEventListener("click", commitApply);
+document.getElementById("apCancel").addEventListener("click", closeApply);
+document.getElementById("apClose").addEventListener("click", closeApply);
+document.getElementById("apAddNew").addEventListener("click", ()=>{
+  onPersonAdded = pid=>{ draft[pid] = {amt: data[apId].app || 0, contrib:null, split:false}; renderApply(); };
+  openPersonForm(null);
+});
+document.getElementById("applyOverlay").addEventListener("keydown", e=>{
+  if(e.key==="Escape") closeApply();
+});
+
+// ---- allotment results still to be recorded ----
+function pendingChecks(){
+  const out = [];
+  data.forEach(d=>{
+    if(!hasClosed(d.b)) return;
+    const rec = appsFor(d.n);
+    const pend = Object.keys(rec).filter(pid=> !rec[pid].alloc && personById(pid));
+    if(pend.length) out.push({d, pend, id: data.indexOf(d)});
+  });
+  return out;
+}
+function renderDue(){
+  const host = document.getElementById("due-host");
+  const rows = pendingChecks();
+  if(!rows.length){ host.innerHTML = ""; return; }
+  const n = rows.reduce((t,r)=>t+r.pend.length, 0);
+  host.innerHTML = `<div class="due">
+    <b>${n} allotment result${n===1?"":"s"} to record.</b>
+    These IPOs have closed — check each PAN on the registrar site, then note it down.
+    <span class="due-list">${rows.map(r=>
+      `<button class="due-chip" data-jump="${r.id}">${escapeHTML(r.d.n)}
+        <span class="due-n">${r.pend.length}</span></button>`).join("")}</span>
+  </div>`;
+  host.querySelectorAll("[data-jump]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const d = data[+el.dataset.jump];
+      open.add(d.n); render();
+      const row = document.querySelector(`tr.main[data-id="${el.dataset.jump}"]`);
+      if(row) row.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+  });
+}
+
+// ---- main render ----
 function render(){
   const host = document.getElementById("table-host");
   const batches = [...new Set(data.map(d=>d.b))];
@@ -377,23 +1188,38 @@ function render(){
     let rows = data.filter(d=>d.b===b);
     if(filter!=="all") rows = rows.filter(d=>d.vc===filter);
     if(!rows.length) return;
-    const bt = rows.reduce((s,r)=>s+r.app,0);
+    const bt = rows.reduce((s,r)=> s + Object.values(appsFor(r.n)).reduce((x,a)=>x+(a.amt||0),0), 0);
+    const potential = rows.reduce((s,r)=>s+r.app,0);
     html += `<div class="batch"><h2>${b}</h2><span class="win">${rows.length} live</span>
-      <span class="bt">batch total <b class="num">${money(bt)}</b></span></div>`;
+      <span class="bt">applied <b class="num">${money(bt)}</b>
+        <span style="opacity:.75">of ${money(potential)} if all apply once</span></span></div>`;
     html += `<div class="tablewrap"><table><thead><tr>
-      <th class="c">Pick</th><th>IPO</th><th class="r">GMP&nbsp;%</th>
-      <th class="r hide">Price band</th><th class="r">Retail&nbsp;₹</th>
+      <th class="c">Applied</th><th>IPO</th><th class="r">GMP&nbsp;%</th>
+      <th class="r hide">Price band</th><th class="r">1 lot&nbsp;₹</th>
       <th class="c hide">Quota</th><th class="c hide">Fund.</th>
       <th class="c hide">Val.</th><th class="c hide">List.</th><th>Verdict</th>
       <th class="c">Allotment</th>
     </tr></thead><tbody>`;
     rows.forEach(d=>{
-      const id = data.indexOf(d);
-      const canPick = d.app>0;
+      const id  = data.indexOf(d);
+      const rec = appsFor(d.n);
+      const ids = applicantIds(d.n);
+      const sum = ids.reduce((s,i)=>s+(rec[i].amt||0),0);
       const rup = (d.rup!=null) ? `<div class="gmprup num">₹${d.rup}</div>` : "";
-      html += `<tr class="${picks.has(id)?"picked":""}" data-id="${id}">
-        <td class="pickcell">${canPick?`<input class="pick" type="checkbox" ${picks.has(id)?"checked":""} data-id="${id}">`:""}</td>
-        <td class="name">${d.n}</td>
+      const who = ids.length
+        ? escapeHTML(ids.map(i=>personById(i).name).join(", "))
+        : "Nobody applied yet";
+      html += `<tr class="main ${ids.length?"applied":""}" data-id="${id}">
+        <td class="pickcell">
+          <button class="applied-btn ${ids.length?"on":""} ${isLocked(d)?"locked":""}"
+             ${ids.length?`data-toggle="${id}"`:`data-ask="${id}"`}
+             title="${ids.length
+                ? (isLocked(d) ? who + " — closed, allotment only" : who)
+                : (hasClosed(d.b) ? "Closed — enter it late if you applied" : "Choose who is applying")}"
+             >${ids.length? ids.length + (isLocked(d)?" 🔒":" ▾") : (hasClosed(d.b)?"+ Late":"+ Apply")}</button>
+          ${sum?`<div class="gmprup num">${money(sum)}</div>`:""}
+        </td>
+        <td class="name ipo-toggle" ${ids.length?`data-toggle="${id}"`:`data-ask="${id}"`}>${d.n}</td>
         <td class="r gmp ${gmpClass(d.gmp)} num">${d.gmp}${rup}</td>
         <td class="r num hide">${d.band}</td>
         <td class="r num">${d.app>0?money(d.app):'<span class="qmark">TBD</span>'}</td>
@@ -402,32 +1228,97 @@ function render(){
         <td class="c hide">${starHTML(d.v)}</td>
         <td class="c hide">${starHTML(d.l)}</td>
         <td><span class="verdict ${vClass(d.vc)} edit" contenteditable="true" data-id="${id}" data-k="view">${d.view}</span></td>
-        <td class="c">${allocCell(d, id)}</td>
+        <td class="c">${allocSummary(d)}</td>
       </tr>`;
+      if(open.has(d.n)){
+        html += `<tr class="detail"><td colspan="11">${panelHTML(d, id)}</td></tr>`;
+      }
     });
     html += `</tbody></table></div>`;
   });
   host.innerHTML = html || `<p style="color:var(--muted)">No IPOs match this filter.</p>`;
   wire();
+  renderDue();
   updateTotal();
+  renderSummary();
   renderHistory();
+}
+
+function tally(n, tone){
+  if(!n) return '<span class="qmark">—</span>';
+  const col = tone==="go" ? "var(--go)" : tone==="stop" ? "var(--stop)" : "var(--text)";
+  return `<b style="color:${col}">${n}</b>`;
+}
+function renderSummary(){
+  const host = document.getElementById("summary-host");
+  if(!people.length){ host.innerHTML=""; return; }
+  const stats = people.map(p=>({p, s:personStats(p.id)}));
+  const any = stats.some(x=> x.s.ipos>0 || x.s.putIn>0);
+  if(!any){ host.innerHTML=""; return; }
+  const tot = stats.reduce((a,x)=>({
+    ipos:a.ipos+x.s.ipos, blocked:a.blocked+x.s.blocked, putIn:a.putIn+x.s.putIn,
+    got:a.got+x.s.got, no:a.no+x.s.no, pend:a.pend+x.s.pend
+  }), {ipos:0,blocked:0,putIn:0,got:0,no:0,pend:0});
+  let html = `<div class="batch" style="margin-top:30px"><h2>Contribution by person</h2>
+    <span class="win">${people.length} ${people.length===1?"person":"people"}</span></div>`;
+  html += `<div class="tablewrap"><table class="sumtable"><thead><tr>
+    <th>Person</th><th class="hide">PAN</th><th class="r">In their name</th>
+    <th class="r hide">Blocked on their PAN</th><th class="r">Money they put in</th>
+    <th class="c">Allotted</th><th class="c">Not allotted</th><th class="c">Pending</th>
+  </tr></thead><tbody>`;
+  stats.forEach(({p,s})=>{
+    html += `<tr>
+      <td class="name">${escapeHTML(p.name)}${p.id===ownerId?'<span class="you-tag">YOU</span>':""}
+        <div class="pan-mini num">${panText(p.pan)}</div></td>
+      <td class="hide num">${escapeHTML(panText(p.pan))}</td>
+      <td class="r num">${s.ipos}</td>
+      <td class="r num hide">${money(s.blocked)}</td>
+      <td class="r num money">${money(s.putIn)}</td>
+      <td class="c num">${tally(s.got,"go")}</td>
+      <td class="c num">${tally(s.no,"stop")}</td>
+      <td class="c num">${tally(s.pend)}</td>
+    </tr>`;
+  });
+  html += `<tr style="background:#F0F2F6">
+      <td class="name">All together</td>
+      <td class="hide"></td>
+      <td class="r num" style="font-weight:700">${tot.ipos}</td>
+      <td class="r num hide">${money(tot.blocked)}</td>
+      <td class="r num money">${money(tot.putIn)}</td>
+      <td class="c num">${tally(tot.got,"go")}</td>
+      <td class="c num">${tally(tot.no,"stop")}</td>
+      <td class="c num">${tally(tot.pend)}</td>
+    </tr>`;
+  html += `</tbody></table></div>`;
+  host.innerHTML = html;
 }
 
 function renderHistory(){
   const host = document.getElementById("history-host");
-  const rows = data.filter(d=> d.alloc==="allotted" || d.alloc==="not-allotted");
+  const rows = [];
+  data.forEach(d=>{
+    const rec = appsFor(d.n);
+    people.forEach(p=>{
+      const a = rec[p.id];
+      if(a && (a.alloc==="allotted" || a.alloc==="not-allotted")) rows.push({d, p, a});
+    });
+  });
   if(!rows.length){ host.innerHTML=""; return; }
   let html = `<div class="batch" style="margin-top:30px"><h2>Application history</h2>
     <span class="win">${rows.length} recorded</span></div>`;
   html += `<div class="tablewrap"><table><thead><tr>
-    <th>IPO</th><th class="c">Window</th><th class="r">GMP&nbsp;%</th><th class="c">Outcome</th>
+    <th>IPO</th><th class="c hide">Window</th><th>Person</th><th class="r">Contributed</th>
+    <th class="r hide">GMP&nbsp;%</th><th class="c">Outcome</th>
   </tr></thead><tbody>`;
-  rows.forEach(d=>{
+  rows.forEach(({d,p,a})=>{
     html += `<tr>
       <td class="name">${d.n}</td>
-      <td class="c">${d.b}</td>
-      <td class="r gmp ${gmpClass(d.gmp)} num">${d.gmp}</td>
-      <td class="c"><span class="verdict ${allocClass(d.alloc)}">${d.alloc==="allotted"?"Allotted":"Not allotted"}</span></td>
+      <td class="c hide">${d.b}</td>
+      <td>${escapeHTML(p.name)}<div class="pan-mini always num">${panText(p.pan)}</div>
+        ${isSplit(p.id,a)?`<div class="funders">funded by ${funderText(p.id,a)}</div>`:""}</td>
+      <td class="r num">${money(a.amt)}</td>
+      <td class="r gmp ${gmpClass(d.gmp)} num hide">${d.gmp}</td>
+      <td class="c"><span class="verdict ${allocClass(a.alloc)}">${a.alloc==="allotted"?"Allotted":"Not allotted"}</span></td>
     </tr>`;
   });
   html += `</tbody></table></div>`;
@@ -435,26 +1326,89 @@ function renderHistory(){
 }
 
 function wire(){
-  document.querySelectorAll(".pick").forEach(cb=>{
-    cb.addEventListener("change", e=>{
-      const id = +e.target.dataset.id;
-      if(e.target.checked) picks.add(id); else picks.delete(id);
-      e.target.closest("tr").classList.toggle("picked", e.target.checked);
+  document.querySelectorAll("[data-toggle]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const d = data[+el.dataset.toggle];
+      if(open.has(d.n)) open.delete(d.n); else open.add(d.n);
+      render();
+    });
+  });
+  document.querySelectorAll("[data-ask]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const id = +el.dataset.ask;
+      if(isLocked(data[id])) return;                       // closed: nothing to edit here
+      if(!people.length){ onPersonAdded = ()=> openApply(id); openPersonForm(null); return; }
+      openApply(id);
+    });
+  });
+  document.querySelectorAll("[data-unlock]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const d = data[+el.dataset.unlock];
+      if(!confirm(`${d.n} has closed, so who applied and how much they put in are already
+settled.\n\nUnlock it anyway to correct a mistake or enter it late?`)) return;
+      unlocked.add(d.n); render();
+    });
+  });
+  document.querySelectorAll("[data-chk]").forEach(el=>{
+    el.addEventListener("click", async ()=>{
+      const d = data[+el.dataset.chk], p = personById(el.dataset.pid);
+      const reg = REGISTRARS[d.n];
+      const url = reg ? reg.url : "https://www.bseindia.com/investors/appli_check.aspx";
+      let copied = false;
+      try{
+        await navigator.clipboard.writeText(p.pan);       // needs https or localhost
+        copied = true;
+      }catch(e){
+        try{                                              // older browsers / insecure origin
+          const ta = document.createElement("textarea");
+          ta.value = p.pan; ta.style.position = "fixed"; ta.style.opacity = "0";
+          document.body.appendChild(ta); ta.select();
+          copied = document.execCommand("copy");
+          document.body.removeChild(ta);
+        }catch(e2){}
+      }
+      const was = el.textContent;
+      el.textContent = copied ? "✓ PAN copied" : panText(p.pan);
+      el.classList.add("copied");
+      setTimeout(()=>{ el.textContent = was; el.classList.remove("copied"); }, 2600);
+      window.open(url, "_blank", "noopener");
+    });
+  });
+  document.querySelectorAll("[data-relock]").forEach(el=>{
+    el.addEventListener("click", ()=>{ unlocked.delete(data[+el.dataset.relock].n); render(); });
+  });
+  document.querySelectorAll(".amt-in").forEach(inp=>{
+    selectOnFocus(inp);
+    inp.addEventListener("input", e=>{
+      const clean = e.target.value.replace(/[^0-9]/g,"");
+      if(clean !== e.target.value) e.target.value = clean;
+      const d = data[+e.target.dataset.id];
+      const a = appsFor(d.n)[e.target.dataset.pid];
+      if(!a) return;
+      a.amt = clean ? +clean : 0;
+      saveApps();
       updateTotal();
-      save();
+    });
+    inp.addEventListener("change", ()=>{
+      setTimeout(()=>{                       // let focus land first
+        if(!document.activeElement || !document.activeElement.classList.contains("amt-in")) render();
+      }, 0);
+    });
+    inp.addEventListener("keydown", e=>{ if(e.key==="Enter") e.target.blur(); });
+  });
+  document.querySelectorAll(".alloc-select").forEach(sel=>{
+    sel.addEventListener("change", e=>{
+      const d = data[+e.target.dataset.id];
+      const a = appsFor(d.n)[e.target.dataset.pid];
+      if(!a) return;
+      a.alloc = e.target.value || null;
+      saveApps();
+      render();
     });
   });
   document.querySelectorAll(".edit[data-k='view']").forEach(el=>{
     el.addEventListener("blur", e=>commitView(e.target));
     el.addEventListener("keydown", e=>{ if(e.key==="Enter"){e.preventDefault();e.target.blur();} });
-  });
-  document.querySelectorAll(".alloc-select").forEach(sel=>{
-    sel.addEventListener("change", e=>{
-      const id = +e.target.dataset.id;
-      data[id].alloc = e.target.value || null;
-      save();
-      render();
-    });
   });
 }
 
@@ -469,12 +1423,26 @@ function commitView(el){
 }
 
 function updateTotal(){
-  let sum=0; picks.forEach(id=> sum+=data[id].app);
+  let sum=0, n=0, ipos=0;
+  data.forEach(d=>{
+    const ids = applicantIds(d.n);
+    if(!ids.length) return;
+    ipos++;
+    ids.forEach(i=>{ sum += appsFor(d.n)[i].amt||0; n++; });
+  });
   const amt=document.getElementById("total");
   amt.textContent=money(sum);
   amt.classList.add("flash"); setTimeout(()=>amt.classList.remove("flash"),220);
-  const c=picks.size;
-  document.getElementById("picksub").textContent = `${c} IPO${c===1?"":"s"} selected`;
+  const who = new Set();
+  data.forEach(d=> applicantIds(d.n).forEach(i=>who.add(i)));
+  let mine = 0;
+  if(ownerId) data.forEach(d=>{ mine += ipoShares(d.n)[ownerId] || 0; });
+  const sub = document.getElementById("picksub");
+  if(!n){ sub.textContent = "No applications yet — open an IPO to tick who applied"; return; }
+  const line = `${n} application${n===1?"":"s"} · ${ipos} IPO${ipos===1?"":"s"} · ${who.size} ${who.size===1?"person":"people"}`;
+  sub.innerHTML = (ownerId && mine !== sum)
+    ? `${line}<br><span class="mine">Your share <b>${money(mine)}</b></span>`
+    : line;
 }
 
 // ---- live GMP ----
@@ -524,16 +1492,24 @@ document.getElementById("chips").addEventListener("click", e=>{
   render();
 });
 document.getElementById("refresh").addEventListener("click", ()=>loadLive(true));
-document.getElementById("selGo").addEventListener("click", ()=>{
-  picks.clear(); data.forEach((d,i)=>{ if(d.vc==="go" && d.app>0) picks.add(i); }); render(); save();
+document.getElementById("clearApps").addEventListener("click", ()=>{
+  if(!Object.keys(apps).length){ alert("There are no applications recorded yet."); return; }
+  if(!confirm("Clear every recorded application (who applied, amounts and allotment results)?\n\nPeople stay saved.")) return;
+  apps = {}; saveApps(); render();
 });
-document.getElementById("clearSel").addEventListener("click", ()=>{ picks.clear(); render(); save(); });
+
+document.querySelectorAll("[data-eye]").forEach(b=> b.addEventListener("click", togglePans));
 
 // ---- boot ----
+data   = load();
+people = readJSON(PEOPLE_KEY) || [];
+apps   = readJSON(APPS_KEY) || {};
+migrate();
+loadOwner();
+renderWelcome();
 render();
 loadLive(false);
-renderWelcome();
-if(!loadProfile()) openOnboard();
+if(!people.length) openPersonForm(null);
 </script>
 </body>
 </html>
