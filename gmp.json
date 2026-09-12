@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
   "source_stamp": "12 Sept, 07:20",
-  "generated_at": "2026-09-12T01:58:23Z",
+  "generated_at": "2026-09-12T07:25:02Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -21,13 +21,13 @@
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 24.73,
-      "gmp_rupees": 45
+      "gmp_pct": 26.37,
+      "gmp_rupees": 48
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 34.16,
-      "gmp_rupees": 138
+      "gmp_pct": 36.63,
+      "gmp_rupees": 148
     },
     {
       "name": "Karamtara Engineering",
@@ -36,8 +36,8 @@
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 34.25,
-      "gmp_rupees": 50
+      "gmp_pct": 51.37,
+      "gmp_rupees": 75
     },
     {
       "name": "Asset Reconstruction",
@@ -46,8 +46,8 @@
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": 2.36,
-      "gmp_rupees": 8
+      "gmp_pct": 1.18,
+      "gmp_rupees": 4
     },
     {
       "name": "Steamhouse India",
@@ -61,13 +61,13 @@
     },
     {
       "name": "Manika Plastech",
-      "gmp_pct": 30.23,
-      "gmp_rupees": 13
+      "gmp_pct": 23.26,
+      "gmp_rupees": 10
     },
     {
       "name": "NSE",
-      "gmp_pct": 11.2,
-      "gmp_rupees": 200
+      "gmp_pct": 12.21,
+      "gmp_rupees": 218
     }
   ]
 }
