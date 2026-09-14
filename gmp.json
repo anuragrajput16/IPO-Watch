@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "13 Sept, 08:50",
-  "generated_at": "2026-09-14T02:09:46Z",
+  "source_stamp": "14 Sept, 08:30",
+  "generated_at": "2026-09-14T08:13:32Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -11,8 +11,8 @@
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 37.34,
-      "gmp_rupees": 236
+      "gmp_pct": 38.13,
+      "gmp_rupees": 241
     },
     {
       "name": "Prasol Chemicals",
@@ -21,33 +21,33 @@
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 26.37,
-      "gmp_rupees": 48
+      "gmp_pct": 28.57,
+      "gmp_rupees": 52
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 36.63,
-      "gmp_rupees": 148
+      "gmp_pct": 39.6,
+      "gmp_rupees": 160
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 27.17,
-      "gmp_rupees": 69
+      "gmp_pct": 27.95,
+      "gmp_rupees": 71
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 51.37,
-      "gmp_rupees": 75
+      "gmp_pct": 43.84,
+      "gmp_rupees": 64
     },
     {
       "name": "Asset Reconstruction",
-      "gmp_pct": 10.07,
-      "gmp_rupees": 14
+      "gmp_pct": 10.79,
+      "gmp_rupees": 15
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": 1.18,
-      "gmp_rupees": 4
+      "gmp_pct": null,
+      "gmp_rupees": 0
     },
     {
       "name": "Steamhouse India",
@@ -56,8 +56,8 @@
     },
     {
       "name": "Veegaland Developers",
-      "gmp_pct": 17.14,
-      "gmp_rupees": 24
+      "gmp_pct": 10.71,
+      "gmp_rupees": 15
     },
     {
       "name": "Manika Plastech",
