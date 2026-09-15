@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "14 Sept, 08:30",
-  "generated_at": "2026-09-14T21:08:22Z",
+  "source_stamp": "15 Sept, 07:00",
+  "generated_at": "2026-09-15T02:16:11Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -41,33 +41,33 @@
     },
     {
       "name": "Asset Reconstruction",
-      "gmp_pct": 10.79,
-      "gmp_rupees": 15
+      "gmp_pct": 12.23,
+      "gmp_rupees": 17
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": null,
-      "gmp_rupees": 0
+      "gmp_pct": 0.29,
+      "gmp_rupees": 1
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": 27.16,
-      "gmp_rupees": 22
+      "gmp_pct": 29.63,
+      "gmp_rupees": 24
     },
     {
       "name": "Veegaland Developers",
-      "gmp_pct": 10.71,
-      "gmp_rupees": 15
+      "gmp_pct": 14.29,
+      "gmp_rupees": 20
     },
     {
       "name": "Manika Plastech",
-      "gmp_pct": 23.26,
-      "gmp_rupees": 10
+      "gmp_pct": 25.58,
+      "gmp_rupees": 11
     },
     {
       "name": "NSE",
-      "gmp_pct": 12.21,
-      "gmp_rupees": 218
+      "gmp_pct": 11.65,
+      "gmp_rupees": 208
     }
   ]
 }
