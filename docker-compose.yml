@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: ipowatch-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ipowatch
+      POSTGRES_PASSWORD: ipowatch_dev_pw
+      POSTGRES_DB: ipowatch
+    # 5433 on the host: the Homebrew Postgres already owns 5432
+    ports:
+      - "5433:5432"
+    volumes:
+      # postgres:18 wants the mount at /var/lib/postgresql, not .../data —
+      # it keeps the cluster in a versioned subdirectory so pg_upgrade can work
+      - ipowatch_pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ipowatch -d ipowatch"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ipowatch_pgdata:

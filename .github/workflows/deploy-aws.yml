@@ -1,0 +1,160 @@
+# push → test → build image → ECR → migrate → Lambda → S3/CloudFront
+#
+# Free-tier shape: Lambda + Function URL (no API Gateway, no ALB), S3 + CloudFront
+# for the two React apps, Neon for Postgres. See DEPLOY-AWS.md for the one-time setup.
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-aws
+  cancel-in-progress: false      # never cancel a half-finished deploy
+
+permissions:
+  contents: read
+  id-token: write                # OIDC — no long-lived AWS keys in the repo
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: ipowatch
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: ipowatch_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U ipowatch"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgres://ipowatch:test@localhost:5432/ipowatch_test
+      DATABASE_SSL: "false"
+      GMP_SOURCE_URL: https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/
+      # Test-only values; the real secrets live in Lambda's configuration.
+      JWT_ACCESS_SECRET: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+      JWT_REFRESH_SECRET: fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210
+      PAN_ENCRYPTION_KEY: 00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff
+      PAN_HASH_SECRET: test_pan_hash_secret_value_1234567890
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm, cache-dependency-path: backend/package-lock.json }
+      - run: npm ci
+        working-directory: backend
+      - run: npm run typecheck
+        working-directory: backend
+      - run: npm test
+        working-directory: backend
+
+  api:
+    needs: test                  # a red suite never reaches production
+    runs-on: ubuntu-latest
+    outputs:
+      function-url: ${{ steps.url.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push the Lambda image
+        id: image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          REPO: ${{ vars.ECR_REPOSITORY }}
+        run: |
+          # Tagged with the commit SHA so a deploy is traceable and a rollback is
+          # just pointing the function at an earlier tag.
+          TAG="${REGISTRY}/${REPO}:${GITHUB_SHA}"
+          docker build -f backend/Dockerfile.lambda -t "$TAG" backend
+          docker push "$TAG"
+          echo "uri=$TAG" >> "$GITHUB_OUTPUT"
+
+      # Migrations run here, not on Lambda boot: concurrent cold starts would
+      # race, and a cold start is the wrong place to hold a schema lock.
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Migrate the database
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_SSL: "true"
+          NODE_ENV: production
+          GMP_SOURCE_URL: https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/
+          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          PAN_ENCRYPTION_KEY: ${{ secrets.PAN_ENCRYPTION_KEY }}
+          PAN_HASH_SECRET: ${{ secrets.PAN_HASH_SECRET }}
+        run: npm ci && npm run migrate
+
+      - name: Point the function at the new image
+        env:
+          FN: ${{ vars.LAMBDA_FUNCTION }}
+        run: |
+          aws lambda update-function-code \
+            --function-name "$FN" --image-uri "${{ steps.image.outputs.uri }}" >/dev/null
+          aws lambda wait function-updated-v2 --function-name "$FN"
+
+      - name: Smoke-test the deployed function
+        id: url
+        env:
+          FN: ${{ vars.LAMBDA_FUNCTION }}
+        run: |
+          URL=$(aws lambda get-function-url-config --function-name "$FN" --query FunctionUrl --output text)
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          # A green deploy that 500s is worse than a red one — fail here instead.
+          code=$(curl -s -o /tmp/health -w "%{http_code}" --max-time 30 "${URL%/}/api/health")
+          echo "GET /api/health → $code : $(cat /tmp/health)"
+          [ "$code" = "200" ]
+
+  web:
+    needs: api
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Build both apps against the live API
+        env:
+          VITE_API_URL: ${{ vars.API_URL }}
+        run: |
+          if [ -z "$VITE_API_URL" ]; then
+            echo "::error::Set repository variable API_URL to the Function URL + /api"
+            exit 1
+          fi
+          (cd web   && npm ci && npx vite build --base=/app/)
+          (cd admin && npm ci && npx vite build --base=/admin/)
+
+      - name: Upload to S3
+        env:
+          BUCKET: ${{ vars.S3_BUCKET }}
+        run: |
+          # Hashed asset filenames can be cached hard; the HTML must not be, or
+          # browsers keep loading the old bundle after a deploy.
+          aws s3 sync web/dist   "s3://$BUCKET/app"   --delete \
+            --cache-control "public,max-age=31536000,immutable" --exclude "index.html"
+          aws s3 sync admin/dist "s3://$BUCKET/admin" --delete \
+            --cache-control "public,max-age=31536000,immutable" --exclude "index.html"
+          aws s3 cp web/dist/index.html   "s3://$BUCKET/app/index.html"   --cache-control "no-cache"
+          aws s3 cp admin/dist/index.html "s3://$BUCKET/admin/index.html" --cache-control "no-cache"
+
+      - name: Invalidate CloudFront
+        env:
+          DIST: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id "$DIST" \
+            --paths "/app/*" "/admin/*" --query 'Invalidation.Id' --output text

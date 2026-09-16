@@ -1,0 +1,42 @@
+# Render blueprint — free tier. Deploy with: New → Blueprint → point at this repo.
+# The free web service sleeps after 15 minutes idle and cold-starts in ~50s.
+services:
+  - type: web
+    name: ipowatch-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: COOKIE_SAMESITE
+        value: none          # front ends live on a different domain
+      - key: DATABASE_SSL
+        value: true
+      - key: GMP_SOURCE_URL
+        value: https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/
+      # Set these in the dashboard — never commit them:
+      #   DATABASE_URL        your Neon pooled connection string
+      #   JWT_ACCESS_SECRET   openssl rand -hex 32
+      #   JWT_REFRESH_SECRET  openssl rand -hex 32
+      #   PAN_ENCRYPTION_KEY  openssl rand -hex 32
+      #   PAN_HASH_SECRET     openssl rand -hex 32
+      #   WEB_ORIGIN          https://<your-web>.pages.dev
+      #   ADMIN_ORIGIN        https://<your-admin>.pages.dev
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: PAN_ENCRYPTION_KEY
+        sync: false
+      - key: PAN_HASH_SECRET
+        sync: false
+      - key: WEB_ORIGIN
+        sync: false
+      - key: ADMIN_ORIGIN
+        sync: false

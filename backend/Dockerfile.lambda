@@ -1,0 +1,28 @@
+# Lambda container image. Same source as Dockerfile, different base and entry
+# point: the AWS base image implements the Lambda Runtime API and expects a
+# handler rather than a listening server.
+
+# ---- build ----
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build
+
+# ---- production deps only ----
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# ---- runtime ----
+FROM public.ecr.aws/lambda/nodejs:20
+# LAMBDA_TASK_ROOT is /var/task
+COPY --from=deps  /app/node_modules ${LAMBDA_TASK_ROOT}/node_modules
+COPY --from=build /app/dist         ${LAMBDA_TASK_ROOT}/
+# package.json carries "type": "module", without which the .js output won't load
+COPY package.json ${LAMBDA_TASK_ROOT}/
+# <file>.<exported function>
+CMD ["lambda.handler"]

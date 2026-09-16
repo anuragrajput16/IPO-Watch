@@ -1,0 +1,81 @@
+# Builds the two React apps and publishes them to GitHub Pages alongside the
+# original single-file tracker, all under one Pages site:
+#
+#   /IPO-Watch/         the original index.html (unchanged)
+#   /IPO-Watch/app/     the React dashboard
+#   /IPO-Watch/admin/   the admin console
+#
+# Requires: Settings → Pages → Source = "GitHub Actions"
+# Requires: Settings → Secrets and variables → Actions → Variables → API_URL
+#           e.g. https://ipowatch-api.onrender.com/api
+name: Deploy front ends to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two Pages deploys race; let a newer push win.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fail early if the API URL isn't configured
+        run: |
+          if [ -z "${{ vars.API_URL }}" ]; then
+            echo "::error::Set repository variable API_URL (Settings → Secrets and variables → Actions → Variables)."
+            echo "Without it the apps build pointing at localhost:4000 and silently fail for everyone."
+            exit 1
+          fi
+
+      # --base makes asset URLs resolve under the subdirectory; without it the
+      # built index.html asks for /assets/… and Pages returns 404.
+      - name: Build the dashboard
+        working-directory: web
+        env:
+          VITE_API_URL: ${{ vars.API_URL }}
+        run: npm ci && npx vite build --base=/IPO-Watch/app/
+
+      - name: Build the admin console
+        working-directory: admin
+        env:
+          VITE_API_URL: ${{ vars.API_URL }}
+        run: npm ci && npx vite build --base=/IPO-Watch/admin/
+
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          # the original static tracker stays at the root, untouched
+          cp index.html gmp.json _site/
+          cp -r web/dist   _site/app
+          cp -r admin/dist _site/admin
+          echo "--- published tree ---"
+          find _site -maxdepth 2 -not -path '*/assets/*' | sort
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

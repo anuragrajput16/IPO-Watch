@@ -1,0 +1,43 @@
+# Refreshes GMP straight into Postgres, replacing the old commit-a-JSON-file job.
+# Runs on GitHub's machines, so it costs nothing on a public repo and doesn't
+# depend on the API being awake — which matters on a free tier that sleeps.
+name: Scrape GMP into the database
+
+on:
+  schedule:
+    - cron: "0 2,7,12,17 * * *"   # 4x/day UTC
+  workflow_dispatch:
+
+concurrency:
+  group: scrape-gmp
+  cancel-in-progress: true
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - run: npm ci
+        working-directory: backend
+
+      - run: npm run scrape
+        working-directory: backend
+        env:
+          # Repo → Settings → Secrets and variables → Actions → New secret
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_SSL: "true"
+          NODE_ENV: production
+          GMP_SOURCE_URL: https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/
+          # The scrape doesn't sign or decrypt anything, but the config gate
+          # validates the whole env at boot, so these need to be present.
+          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          PAN_ENCRYPTION_KEY: ${{ secrets.PAN_ENCRYPTION_KEY }}
+          PAN_HASH_SECRET: ${{ secrets.PAN_HASH_SECRET }}

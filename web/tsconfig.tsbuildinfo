@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/api/client.ts","./src/auth/authcontext.tsx","./src/components/applymodal.tsx","./src/components/ipotable.tsx","./src/components/lookup.tsx","./src/components/peoplemodal.tsx","./src/components/bits.tsx","./src/pages/dashboard.tsx","./src/pages/login.tsx"],"version":"5.9.3"}

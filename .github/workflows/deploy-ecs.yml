@@ -1,0 +1,108 @@
+# push → test → build image → push to ECR → deploy to ECS
+#
+# Prerequisites, created once (see DEPLOY-ECS.md):
+#   - an ECR repository            e.g. ipowatch-api
+#   - an ECS cluster + service     running a task definition named ipowatch-api
+#   - an IAM role GitHub can assume via OIDC  (no long-lived AWS keys)
+#
+# Repository variables: AWS_REGION, AWS_ROLE_ARN, ECR_REPOSITORY,
+#                       ECS_CLUSTER, ECS_SERVICE, ECS_TASK_FAMILY, CONTAINER_NAME
+name: Deploy API to ECS
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/deploy-ecs.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ecs
+  cancel-in-progress: false      # never cancel a half-finished deploy
+
+permissions:
+  contents: read
+  id-token: write                # required for OIDC
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: ipowatch
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: ipowatch_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U ipowatch"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgres://ipowatch:test@localhost:5432/ipowatch_test
+      DATABASE_SSL: "false"
+      GMP_SOURCE_URL: https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/
+      # Test-only values. Real secrets live in the ECS task definition.
+      JWT_ACCESS_SECRET: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+      JWT_REFRESH_SECRET: fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210
+      PAN_ENCRYPTION_KEY: 00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff
+      PAN_HASH_SECRET: test_pan_hash_secret_value_1234567890
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      - run: npm run typecheck
+        working-directory: backend
+      - run: npm test
+        working-directory: backend
+
+  build-and-deploy:
+    needs: test                  # a red test suite never reaches production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # OIDC: GitHub proves its identity to AWS and gets short-lived credentials.
+      # No AWS access keys are ever stored in the repo.
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        id: image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          REPO: ${{ vars.ECR_REPOSITORY }}
+        run: |
+          # Tag with the commit SHA, not :latest — so a deploy is traceable to a
+          # commit and a rollback is just re-deploying an earlier tag.
+          TAG="${REGISTRY}/${REPO}:${GITHUB_SHA}"
+          docker build -t "$TAG" -t "${REGISTRY}/${REPO}:latest" backend
+          docker push "$TAG"
+          docker push "${REGISTRY}/${REPO}:latest"
+          echo "uri=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Render the new task definition
+        id: taskdef
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition-family: ${{ vars.ECS_TASK_FAMILY }}
+          container-name: ${{ vars.CONTAINER_NAME }}
+          image: ${{ steps.image.outputs.uri }}
+
+      - name: Deploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.taskdef.outputs.task-definition }}
+          cluster: ${{ vars.ECS_CLUSTER }}
+          service: ${{ vars.ECS_SERVICE }}
+          wait-for-service-stability: true    # fails the job if the rollout doesn't settle
