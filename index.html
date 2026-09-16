@@ -87,7 +87,33 @@
   .gmprup{font-weight:600; color:var(--muted); font-size:11px}
   .stars{letter-spacing:1px; font-size:12.5px}
   .star-on{color:#E8A33D} .star-off{color:#D5D9E0}
+  /* half rating: left half filled, right half empty, painted through the glyph */
+  .star-half{background:linear-gradient(90deg,#E8A33D 50%,#D5D9E0 50%);
+             -webkit-background-clip:text; background-clip:text; color:transparent}
   .qmark{color:var(--muted)}
+
+  .expired{display:inline-block; margin-left:6px; padding:1px 6px; border-radius:999px;
+           background:#EDEFF3; color:var(--muted); font-size:9.5px; font-weight:700;
+           text-transform:uppercase; white-space:nowrap; vertical-align:1px}
+
+  .rank{display:inline-block; margin-right:6px; font-size:11px; font-weight:700;
+        color:var(--muted); font-variant-numeric:tabular-nums}
+  .rank.top{font-size:13px; margin-right:4px}
+
+  .lookup{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px}
+  .lk-controls{display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end}
+  .lk-controls label{display:flex; flex-direction:column; gap:5px;
+                     font-size:11px; font-weight:700; color:#4A5160}
+  .lk-controls select{font:inherit; font-size:13px; padding:7px 10px; border:1px solid var(--line);
+                      border-radius:8px; background:#fff; color:var(--text); min-width:200px}
+  .lk-out{margin-top:14px; padding-top:13px; border-top:1px solid var(--line);
+          display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .lk-verdict{display:inline-block; font-size:15px; font-weight:750;
+              padding:7px 15px; border-radius:999px; white-space:nowrap}
+  .lk-verdict.v-none{background:#EDEFF3; color:var(--muted)}   /* nothing to act on */
+  .lk-say{color:var(--muted); font-size:12.5px; line-height:1.55; flex:1; min-width:220px}
+  .lk-say b{color:var(--text)}
+  .lk-act{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 
   .verdict{display:inline-block; padding:4px 10px; border-radius:999px;
            font-size:11.5px; font-weight:700; white-space:nowrap}
@@ -400,6 +426,7 @@
   <div id="due-host"></div>
   <div id="table-host"></div>
   <div id="summary-host"></div>
+  <div id="lookup-host"></div>
   <div id="history-host"></div>
 </div>
 
@@ -407,6 +434,7 @@
   <p><b>Live GMP:</b> figures are pulled from a <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">gmp.json</code> file that a scheduled job refreshes every few hours, sourced from ipowatch.in.
   Press <b>Refresh GMP</b> to re-read the latest. Open this page from your GitHub Pages URL (not the local file) for live data.</p>
   <p><b>Everything stays on this device.</b> Names, PANs and contribution amounts live in your browser’s localStorage only — nothing is uploaded. Clearing site data wipes them.</p>
+  <p><b>An asterisk (*)</b> on a figure — e.g. A-One Steels' <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">35%*</code> quota — means indicative, not yet confirmed in the offer document.</p>
   <p><b>GMP is unofficial</b> grey-market data — a rough sentiment signal, not a forecast, and sources disagree. Default contribution is 1 lot at the upper band (cut-off). None of this is financial advice.</p>
 </footer>
 
@@ -414,19 +442,26 @@
 const GMP_URL = "gmp.json";
 
 const DEFAULTS = [
-  {b:"7–9 Sep",   n:"Pranav Constructions",  gmp:"29%",  rup:36,  band:"₹118–124", app:14880, quota:"45%", f:4, v:4, l:5, view:"Apply",          vc:"go"},
-  {b:"8–10 Sep",  n:"Kanohar Electricals",   gmp:"30%",  rup:190, band:"₹601–632", app:14536, quota:"35%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
-  {b:"8–10 Sep",  n:"Prasol Chemicals",      gmp:"16%",  rup:110, band:"₹643–676", app:14872, quota:"35%", f:4, v:3, l:4, view:"Cautious Apply", vc:"wait"},
-  {b:"8–10 Sep",  n:"Glass Wall Systems",    gmp:"18%",  rup:32,  band:"₹172–182", app:14924, quota:"35%", f:4, v:2, l:3, view:"Skip",           vc:"wait"},
-  {b:"9–11 Sep",  n:"Rentomojo",             gmp:"35%",  rup:140, band:"₹384–404", app:14948, quota:"10%", f:5, v:3, l:5, view:"Apply",          vc:"go"},
-  {b:"9–11 Sep",  n:"Karamtara Engineering", gmp:"20%",  rup:50,  band:"₹241–254", app:14986, quota:"35%", f:5, v:4, l:4, view:"Strong Apply",   vc:"go"},
-  {b:"9–11 Sep",  n:"LCC Projects",          gmp:"15%",  rup:22,  band:"₹139–146", app:14892, quota:"35%", f:5, v:4, l:4, view:"Apply",          vc:"go"},
-  {b:"9–11 Sep",  n:"Asset Reconstruction",  gmp:"TBD",  rup:null,band:"₹132–139", app:14873, quota:"35%", f:5, v:4, l:2, view:"Long-term",      vc:"wait"},
-  {b:"9–11 Sep",  n:"Manipal Payment",       gmp:"7%",   rup:25,  band:"₹322–339", app:14916, quota:"35%", f:-1,v:-1,l:3, view:"Wait",           vc:"wait"},
-  {b:"9–11 Sep",  n:"Steamhouse India",      gmp:"TBD",  rup:null,band:"₹77–81",   app:14900, quota:"35%", f:3, v:-1,l:2, view:"Skip",           vc:"stop"},
-  {b:"10–15 Sep", n:"Veegaland Developers",  gmp:"17%",  rup:24,  band:"₹130–140", app:14980, quota:"35%", f:4, v:3, l:4, view:"Watch",          vc:"wait"},
-  {b:"11–16 Sep", n:"Manika Plastech",       gmp:"TBD",  rup:null,band:"₹40–43",   app:0,     quota:"35%", f:3, v:-1,l:2, view:"Wait",           vc:"wait"},
-  {b:"21–23 Sep", n:"NSE",                   gmp:"TBD",  rup:null,band:"TBD",      app:0,     quota:"TBD", f:5, v:-1,l:5, view:"WAIT",           vc:"wait"},
+  // rank = my running order across the live windows (0 = past/unranked).
+  // f Fundamentals · v Valuation · lt Long-term · l Listing potential (-1 = not rated yet).
+  {b:"7–9 Sep",   n:"Pranav Constructions",  rank:0, gmp:"29%",    rup:36,   band:"₹118–124",     app:14880, quota:"45%",  f:4,   v:4,  lt:-1,  l:5, view:"Apply",           vc:"go"},
+  {b:"8–10 Sep",  n:"Kanohar Electricals",   rank:0, gmp:"30%",    rup:190,  band:"₹601–632",     app:14536, quota:"35%",  f:5,   v:3,  lt:-1,  l:5, view:"Apply",           vc:"go"},
+  {b:"8–10 Sep",  n:"Prasol Chemicals",      rank:0, gmp:"16%",    rup:110,  band:"₹643–676",     app:14872, quota:"35%",  f:4,   v:3,  lt:-1,  l:4, view:"Cautious Apply",  vc:"wait"},
+  {b:"8–10 Sep",  n:"Glass Wall Systems",    rank:0, gmp:"18%",    rup:32,   band:"₹172–182",     app:14924, quota:"35%",  f:4,   v:2,  lt:-1,  l:3, view:"Skip",            vc:"wait"},
+  {b:"9–11 Sep",  n:"Rentomojo",             rank:0, gmp:"35%",    rup:140,  band:"₹384–404",     app:14948, quota:"10%",  f:5,   v:3,  lt:-1,  l:5, view:"Apply",           vc:"go"},
+  {b:"9–11 Sep",  n:"Karamtara Engineering", rank:0, gmp:"20%",    rup:50,   band:"₹241–254",     app:14986, quota:"35%",  f:5,   v:4,  lt:-1,  l:4, view:"Strong Apply",    vc:"go"},
+  {b:"9–11 Sep",  n:"LCC Projects",          rank:0, gmp:"15%",    rup:22,   band:"₹139–146",     app:14892, quota:"35%",  f:5,   v:4,  lt:-1,  l:4, view:"Apply",           vc:"go"},
+  {b:"9–11 Sep",  n:"Asset Reconstruction",  rank:0, gmp:"TBD",    rup:null, band:"₹132–139",     app:14873, quota:"35%",  f:5,   v:4,  lt:-1,  l:2, view:"Long-term",       vc:"wait"},
+  {b:"9–11 Sep",  n:"Manipal Payment",       rank:0, gmp:"7%",     rup:25,   band:"₹322–339",     app:14916, quota:"35%",  f:-1,  v:-1, lt:-1,  l:3, view:"Wait",            vc:"wait"},
+  {b:"9–11 Sep",  n:"Steamhouse India",      rank:0, gmp:"TBD",    rup:null, band:"₹77–81",       app:14900, quota:"35%",  f:3,   v:-1, lt:-1,  l:2, view:"Skip",            vc:"stop"},
+  {b:"10–15 Sep", n:"Veegaland Developers",  rank:6, gmp:"14.29%", rup:20,   band:"₹130–140",     app:14980, quota:"35%",  f:4,   v:3,  lt:4,   l:3, view:"Watch",           vc:"wait"},
+  {b:"11–16 Sep", n:"Manika Plastech",       rank:5, gmp:"25.58%", rup:11,   band:"₹40–43",       app:14964, quota:"35%",  f:3.5, v:4,  lt:3.5, l:4, view:"Selective",       vc:"wait"},
+  {b:"16–18 Sep", n:"SS Retail",             rank:2, gmp:"33.02%", rup:140,  band:"₹403–424",     app:14840, quota:"35%",  f:4,   v:3,  lt:4,   l:5, view:"Apply",           vc:"go"},
+  {b:"16–18 Sep", n:"Hero Motors",           rank:3, gmp:"28.57%", rup:24,   band:"₹79–84",       app:14952, quota:"35%",  f:4,   v:4,  lt:4,   l:5, view:"Apply",           vc:"go"},
+  {b:"16–18 Sep", n:"Jindal Supreme",        rank:4, gmp:"29.03%", rup:27,   band:"₹88–93",       app:14973, quota:"35%",  f:3.5, v:4,  lt:3.5, l:5, view:"Selective Apply", vc:"go"},
+  {b:"17–21 Sep", n:"NSE",                   rank:1, gmp:"11.65%", rup:208,  band:"₹1,700–1,785", app:14280, quota:"35%",  f:5,   v:4,  lt:5,   l:4, view:"Strong Apply",    vc:"go"},
+  {b:"17–21 Sep", n:"Sonaselection India",   rank:7, gmp:"0%",     rup:0,    band:"₹94–99",       app:14850, quota:"35%",  f:4,   v:3,  lt:3.5, l:2, view:"Wait",            vc:"wait"},
+  {b:"24–28 Sep", n:"A-One Steels",          rank:8, gmp:"0%",     rup:0,    band:"TBD",          app:0,     quota:"35%*", f:3.5, v:-1, lt:3.5, l:2, view:"Wait",            vc:"wait"},
 ];
 
 // Registrar handling each IPO's allotment — from each company's IPO detail
@@ -595,8 +630,26 @@ function togglePans(){
 function money(n){ return "₹" + (n||0).toLocaleString("en-IN"); }
 function starHTML(k){
   if(k<0) return '<span class="qmark">?</span>';
-  let s=""; for(let i=1;i<=5;i++) s += `<span class="${i<=k?'star-on':'star-off'}">★</span>`;
-  return `<span class="stars">${s}</span>`;
+  let s="";
+  for(let i=1;i<=5;i++){
+    const cls = i<=k ? "star-on" : (i-0.5<=k ? "star-half" : "star-off");
+    s += `<span class="${cls}">★</span>`;
+  }
+  return `<span class="stars" title="${k} of 5">${s}</span>`;
+}
+// Past its last day the IPO can no longer be applied for — only its allotment
+// is still to come — so say so on the row rather than leaving it looking open.
+function expiredHTML(b){
+  if(!hasClosed(b)) return "";
+  const d = batchCloseDate(b);
+  const when = d ? d.toLocaleDateString([], {day:"numeric", month:"short"}) : "";
+  return `<span class="expired" title="Applications closed${when?" "+when:""} — allotment only">Expired</span>`;
+}
+// My ordering across the live windows — medals for the top three, #n below that.
+function rankHTML(r){
+  if(!r) return "";
+  const medal = {1:"🥇",2:"🥈",3:"🥉"}[r];
+  return `<span class="rank${medal?" top":""}" title="My rank: ${r}">${medal||"#"+r}</span>`;
 }
 function gmpClass(g){ return g==="TBD"?"tbd": g==="0%"?"zero":"pos"; }
 function vClass(vc){ return vc==="go"?"v-go":vc==="stop"?"v-stop":"v-wait"; }
@@ -1190,14 +1243,19 @@ function render(){
     if(!rows.length) return;
     const bt = rows.reduce((s,r)=> s + Object.values(appsFor(r.n)).reduce((x,a)=>x+(a.amt||0),0), 0);
     const potential = rows.reduce((s,r)=>s+r.app,0);
-    html += `<div class="batch"><h2>${b}</h2><span class="win">${rows.length} live</span>
+    const shut = hasClosed(b);
+    html += `<div class="batch"><h2>${b}</h2>
+      <span class="win">${rows.length} ${shut?"expired":"live"}</span>
       <span class="bt">applied <b class="num">${money(bt)}</b>
-        <span style="opacity:.75">of ${money(potential)} if all apply once</span></span></div>`;
+        ${shut?"":`<span style="opacity:.75">of ${money(potential)} if all apply once</span>`}</span></div>`;
     html += `<div class="tablewrap"><table><thead><tr>
       <th class="c">Applied</th><th>IPO</th><th class="r">GMP&nbsp;%</th>
       <th class="r hide">Price band</th><th class="r">1 lot&nbsp;₹</th>
-      <th class="c hide">Quota</th><th class="c hide">Fund.</th>
-      <th class="c hide">Val.</th><th class="c hide">List.</th><th>Verdict</th>
+      <th class="c hide" title="Retail quota">Quota</th>
+      <th class="c hide" title="Fundamentals">Fund.</th>
+      <th class="c hide" title="Valuation">Val.</th>
+      <th class="c hide" title="Long-term potential">Long</th>
+      <th class="c hide" title="Listing potential">List.</th><th>Verdict</th>
       <th class="c">Allotment</th>
     </tr></thead><tbody>`;
     rows.forEach(d=>{
@@ -1219,19 +1277,20 @@ function render(){
              >${ids.length? ids.length + (isLocked(d)?" 🔒":" ▾") : (hasClosed(d.b)?"+ Late":"+ Apply")}</button>
           ${sum?`<div class="gmprup num">${money(sum)}</div>`:""}
         </td>
-        <td class="name ipo-toggle" ${ids.length?`data-toggle="${id}"`:`data-ask="${id}"`}>${d.n}</td>
+        <td class="name ipo-toggle" ${ids.length?`data-toggle="${id}"`:`data-ask="${id}"`}>${rankHTML(d.rank)}${d.n}${expiredHTML(d.b)}</td>
         <td class="r gmp ${gmpClass(d.gmp)} num">${d.gmp}${rup}</td>
         <td class="r num hide">${d.band}</td>
         <td class="r num">${d.app>0?money(d.app):'<span class="qmark">TBD</span>'}</td>
         <td class="c hide">${d.quota}</td>
         <td class="c hide">${starHTML(d.f)}</td>
         <td class="c hide">${starHTML(d.v)}</td>
+        <td class="c hide">${starHTML(d.lt)}</td>
         <td class="c hide">${starHTML(d.l)}</td>
         <td><span class="verdict ${vClass(d.vc)} edit" contenteditable="true" data-id="${id}" data-k="view">${d.view}</span></td>
         <td class="c">${allocSummary(d)}</td>
       </tr>`;
       if(open.has(d.n)){
-        html += `<tr class="detail"><td colspan="11">${panelHTML(d, id)}</td></tr>`;
+        html += `<tr class="detail"><td colspan="12">${panelHTML(d, id)}</td></tr>`;
       }
     });
     html += `</tbody></table></div>`;
@@ -1241,7 +1300,96 @@ function render(){
   renderDue();
   updateTotal();
   renderSummary();
+  renderLookup();
   renderHistory();
+}
+
+// ---- "is this PAN allotted for this IPO?" ----
+// The answer is whatever was recorded after checking the registrar; nothing here
+// contacts them. Pending pairs get the one-click check plus a place to record it.
+let lkPid = null, lkIpo = null;
+
+function lkStatus(p, d){
+  const a = appsFor(d.n)[p.id];
+  const who = escapeHTML(p.name);
+  if(!a) return {tone:"none", head:"Didn\u2019t apply",
+    say:`<b>${who}</b> has no application recorded for <b>${escapeHTML(d.n)}</b>.`};
+  if(!hasClosed(d.b)){
+    const c = batchCloseDate(d.b);
+    const when = c ? c.toLocaleDateString([], {day:"numeric", month:"short"}) : "it closes";
+    return {tone:"wait", head:"Not out yet",
+      say:`<b>${escapeHTML(d.n)}</b> is still open \u2014 applications close <b>${when}</b>.
+           Allotment is usually out about two working days later.`};
+  }
+  if(a.alloc === "allotted") return {tone:"go", head:"Allotted",
+    say:`Recorded as allotted for <b>${who}</b> \u2014 <b class="num">${money(a.amt||0)}</b> applied.`};
+  if(a.alloc === "not-allotted") return {tone:"stop", head:"Not allotted",
+    say:`Recorded as not allotted for <b>${who}</b>. The blocked
+         <b class="num">${money(a.amt||0)}</b> should have been released.`};
+  return {tone:"wait", head:"Not checked yet", pending:true,
+    say:`<b>${escapeHTML(d.n)}</b> has closed and <b>${who}</b> applied
+         <b class="num">${money(a.amt||0)}</b>, but the result isn\u2019t recorded.
+         Check it on the registrar site, then set it here.`};
+}
+
+function renderLookup(){
+  const host = document.getElementById("lookup-host");
+  if(!people.length || !Object.keys(apps).length){ host.innerHTML = ""; return; }
+
+  if(!personById(lkPid)) lkPid = people[0].id;
+  const p = personById(lkPid);
+  // default to something worth looking at: their first unrecorded closed IPO
+  if(!lkIpo || !data.some(d=>d.n===lkIpo)){
+    const mine = data.filter(d=> appsFor(d.n)[p.id]);
+    const open = mine.find(d=> hasClosed(d.b) && !appsFor(d.n)[p.id].alloc);
+    lkIpo = (open || mine[0] || data[0]).n;
+  }
+  const d = data.find(x=>x.n===lkIpo);
+  const st = lkStatus(p, d);
+  const cls = st.tone==="go" ? "v-go" : st.tone==="stop" ? "v-stop"
+            : st.tone==="none" ? "v-none" : "v-wait";
+
+  const applied = new Set(Object.keys(apps).filter(n=> apps[n][p.id]));
+  const opt = (n, sel)=> `<option value="${escapeHTML(n)}" ${sel?"selected":""}>${
+      escapeHTML(n)}${applied.has(n)?"":" \u00b7 not applied"}</option>`;
+
+  host.innerHTML = `<div class="batch" style="margin-top:30px"><h2>Is it allotted?</h2>
+      <span class="win">pick a PAN and an IPO</span></div>
+    <div class="lookup">
+      <div class="lk-controls">
+        <label>PAN
+          <select id="lkPanSel">${people.map(x=>
+            `<option value="${x.id}" ${x.id===p.id?"selected":""}>${escapeHTML(x.name)} \u00b7 ${
+               escapeHTML(panText(x.pan))}</option>`).join("")}</select></label>
+        <label>IPO
+          <select id="lkIpoSel">${data.map(x=> opt(x.n, x.n===d.n)).join("")}</select></label>
+      </div>
+      <div class="lk-out">
+        <span class="lk-verdict ${cls}">${st.head}</span>
+        <span class="lk-say">${st.say}</span>
+        ${st.pending ? `<span class="lk-act">
+            <button class="chk-btn" id="lkCheck">Copy PAN &amp; check \u2197</button>
+            ${allocSelect(data.indexOf(d), p.id, null)}
+          </span>` : ""}
+      </div>
+    </div>`;
+
+  host.querySelector("#lkPanSel").addEventListener("change", e=>{
+    lkPid = e.target.value; renderLookup();
+  });
+  host.querySelector("#lkIpoSel").addEventListener("change", e=>{
+    lkIpo = e.target.value; renderLookup();
+  });
+  const chk = host.querySelector("#lkCheck");
+  if(chk) chk.addEventListener("click", ()=> checkAtRegistrar(chk, d, p));
+  const sel = host.querySelector(".alloc-select");
+  if(sel) sel.addEventListener("change", e=>{
+    const a = appsFor(d.n)[p.id];
+    if(!a) return;
+    a.alloc = e.target.value || null;
+    saveApps();
+    render();
+  });
 }
 
 function tally(n, tone){
@@ -1350,29 +1498,8 @@ settled.\n\nUnlock it anyway to correct a mistake or enter it late?`)) return;
     });
   });
   document.querySelectorAll("[data-chk]").forEach(el=>{
-    el.addEventListener("click", async ()=>{
-      const d = data[+el.dataset.chk], p = personById(el.dataset.pid);
-      const reg = REGISTRARS[d.n];
-      const url = reg ? reg.url : "https://www.bseindia.com/investors/appli_check.aspx";
-      let copied = false;
-      try{
-        await navigator.clipboard.writeText(p.pan);       // needs https or localhost
-        copied = true;
-      }catch(e){
-        try{                                              // older browsers / insecure origin
-          const ta = document.createElement("textarea");
-          ta.value = p.pan; ta.style.position = "fixed"; ta.style.opacity = "0";
-          document.body.appendChild(ta); ta.select();
-          copied = document.execCommand("copy");
-          document.body.removeChild(ta);
-        }catch(e2){}
-      }
-      const was = el.textContent;
-      el.textContent = copied ? "✓ PAN copied" : panText(p.pan);
-      el.classList.add("copied");
-      setTimeout(()=>{ el.textContent = was; el.classList.remove("copied"); }, 2600);
-      window.open(url, "_blank", "noopener");
-    });
+    el.addEventListener("click", ()=> checkAtRegistrar(el, data[+el.dataset.chk],
+                                                       personById(el.dataset.pid)));
   });
   document.querySelectorAll("[data-relock]").forEach(el=>{
     el.addEventListener("click", ()=>{ unlocked.delete(data[+el.dataset.relock].n); render(); });
@@ -1410,6 +1537,34 @@ settled.\n\nUnlock it anyway to correct a mistake or enter it late?`)) return;
     el.addEventListener("blur", e=>commitView(e.target));
     el.addEventListener("keydown", e=>{ if(e.key==="Enter"){e.preventDefault();e.target.blur();} });
   });
+}
+
+async function copyText(t){
+  try{
+    await navigator.clipboard.writeText(t);             // needs https or localhost
+    return true;
+  }catch(e){
+    try{                                                // older browsers / insecure origin
+      const ta = document.createElement("textarea");
+      ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    }catch(e2){ return false; }
+  }
+}
+// Registrars have no public API and their status pages sit behind a CAPTCHA, so the
+// page can't read the result — it hands you the PAN and the right site, you read it there.
+async function checkAtRegistrar(btn, d, p){
+  const reg = REGISTRARS[d.n];
+  const url = reg ? reg.url : "https://www.bseindia.com/investors/appli_check.aspx";
+  const copied = await copyText(p.pan);
+  const was = btn.textContent;
+  btn.textContent = copied ? "✓ PAN copied" : panText(p.pan);
+  btn.classList.add("copied");
+  setTimeout(()=>{ btn.textContent = was; btn.classList.remove("copied"); }, 2600);
+  window.open(url, "_blank", "noopener");
 }
 
 function commitView(el){
@@ -1467,7 +1622,11 @@ async function loadLive(manual){
     (j.items||[]).forEach(it=>{
       const row = data.find(d=> d.n === it.name);
       if(!row) return;
-      if(it.gmp_pct===null || it.gmp_pct===undefined){ row.gmp="TBD"; row.rup=null; }
+      // A closed IPO drops off the source; blanking it would lose the number it
+      // actually traded at, so only live windows fall back to TBD.
+      if(it.gmp_pct===null || it.gmp_pct===undefined){
+        if(!hasClosed(row.b)){ row.gmp="TBD"; row.rup=null; }
+      }
       else { row.gmp = it.gmp_pct + "%"; row.rup = (it.gmp_rupees!=null)?it.gmp_rupees:null; n++; }
     });
     const when = j.source_stamp || (j.generated_at ? fmtWhen(j.generated_at) : "just now");

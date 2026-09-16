@@ -33,6 +33,13 @@ TRACKED = [
     ("Steamhouse India",      "steamhouse india"),
     ("Veegaland Developers",  "veegaland developers"),
     ("Manika Plastech",       "manika plastech"),
+    ("SS Retail",             "ss retail"),
+    ("Hero Motors",           "hero motors"),
+    ("Jindal Supreme",        "jindal supreme"),
+    ("Sonaselection India",   "sonaselection"),
+    # "one steels" rather than "a-one steels": the source writes the name both
+    # hyphenated and spaced, and this matches either.
+    ("A-One Steels",          "one steels"),
     ("NSE",                   "nse"),  # exact-matched below, not substring
 ]
 
