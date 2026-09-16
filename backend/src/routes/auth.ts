@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, type Request } from "express";
 import rateLimit from "express-rate-limit";
 import { z } from "zod";
 import { REFRESH_TTL_DAYS, env } from "../config/env.js";
@@ -41,6 +41,20 @@ type UserRow = {
 
 const publicUser = (u: UserRow) => ({ id: u.id, email: u.email, name: u.name, role: u.role });
 
+/**
+ * Browsers keep the refresh token in an httpOnly cookie, which JavaScript cannot
+ * read — that is the point. React Native has no such cookie, so a native client
+ * sends `X-Client: mobile` and gets the token in the response body to hold in
+ * secure device storage. Opt-in by header, so browser responses are unchanged
+ * and a web client can never accidentally receive it.
+ */
+const isMobile = (req: Request) =>
+  String(req.headers["x-client"] ?? "").toLowerCase() === "mobile";
+
+/** The refresh token, from the cookie for browsers or the body for mobile. */
+const presentedRefresh = (req: Request): string | undefined =>
+  req.cookies?.[COOKIE] || (typeof req.body?.refreshToken === "string" ? req.body.refreshToken : undefined);
+
 authRouter.post("/register", authLimit,
   validateBody(z.object({
     email: z.string().email().transform((v) => v.toLowerCase()),
@@ -59,7 +73,11 @@ authRouter.post("/register", authLimit,
     );
     const refresh = await issueRefresh(user!.id, req.headers["user-agent"]);
     res.cookie(COOKIE, refresh, cookieOpts);
-    res.status(201).json({ user: publicUser(user!), accessToken: signAccess({ sub: user!.id, role: user!.role, email: user!.email }) });
+    res.status(201).json({
+      user: publicUser(user!),
+      accessToken: signAccess({ sub: user!.id, role: user!.role, email: user!.email }),
+      ...(isMobile(req) ? { refreshToken: refresh } : {}),
+    });
   }));
 
 authRouter.post("/login", authLimit,
@@ -80,11 +98,15 @@ authRouter.post("/login", authLimit,
     await query(`UPDATE users SET last_login_at = now() WHERE id = $1`, [user.id]);
     const refresh = await issueRefresh(user.id, req.headers["user-agent"]);
     res.cookie(COOKIE, refresh, cookieOpts);
-    res.json({ user: publicUser(user), accessToken: signAccess({ sub: user.id, role: user.role, email: user.email }) });
+    res.json({
+      user: publicUser(user),
+      accessToken: signAccess({ sub: user.id, role: user.role, email: user.email }),
+      ...(isMobile(req) ? { refreshToken: refresh } : {}),
+    });
   }));
 
 authRouter.post("/refresh", wrap(async (req, res) => {
-  const raw = req.cookies?.[COOKIE];
+  const raw = presentedRefresh(req);
   if (!raw) throw new AppError(401, "No session");
 
   const rotated = await rotateRefresh(raw, req.headers["user-agent"]);
@@ -99,11 +121,15 @@ authRouter.post("/refresh", wrap(async (req, res) => {
   if (!user || !user.is_active) throw new AppError(403, "This account is deactivated");
 
   res.cookie(COOKIE, rotated.token, cookieOpts);
-  res.json({ user: publicUser(user), accessToken: signAccess({ sub: user.id, role: user.role, email: user.email }) });
+  res.json({
+    user: publicUser(user),
+    accessToken: signAccess({ sub: user.id, role: user.role, email: user.email }),
+    ...(isMobile(req) ? { refreshToken: rotated.token } : {}),
+  });
 }));
 
 authRouter.post("/logout", wrap(async (req, res) => {
-  const raw = req.cookies?.[COOKIE];
+  const raw = presentedRefresh(req);
   if (raw) await revokeRefresh(raw);
   res.clearCookie(COOKIE, { path: cookieOpts.path });
   res.status(204).end();

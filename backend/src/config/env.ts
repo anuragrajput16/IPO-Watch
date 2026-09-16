@@ -13,6 +13,8 @@ const schema = z.object({
   PAN_HASH_SECRET: z.string().min(16),
   WEB_ORIGIN: z.string().url().default("http://localhost:5173"),
   ADMIN_ORIGIN: z.string().url().default("http://localhost:5174"),
+  // Comma-separated extras, e.g. the Expo web preview during development.
+  EXTRA_ORIGINS: z.string().default(""),
   GMP_SOURCE_URL: z.string().url(),
   // Deployed, the API and the front ends sit on different sites, so the refresh
   // cookie has to be SameSite=None — which browsers only accept when Secure.

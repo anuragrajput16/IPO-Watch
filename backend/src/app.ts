@@ -15,7 +15,9 @@ export function createApp() {
   app.set("trust proxy", 1);
   app.use(helmet());
   // Both front ends share this API; credentials are on for the refresh cookie.
-  app.use(cors({ origin: [env.WEB_ORIGIN, env.ADMIN_ORIGIN], credentials: true }));
+  const origins = [env.WEB_ORIGIN, env.ADMIN_ORIGIN,
+                   ...env.EXTRA_ORIGINS.split(",").map((o) => o.trim()).filter(Boolean)];
+  app.use(cors({ origin: origins, credentials: true }));
   app.use(express.json({ limit: "100kb" }));
   app.use(cookieParser());
 
