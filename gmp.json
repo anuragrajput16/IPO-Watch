@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
   "source_stamp": "16 Sept, 07:00",
-  "generated_at": "2026-09-16T02:09:18Z",
+  "generated_at": "2026-09-16T08:00:36Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -63,6 +63,31 @@
       "name": "Manika Plastech",
       "gmp_pct": 6.98,
       "gmp_rupees": 3
+    },
+    {
+      "name": "SS Retail",
+      "gmp_pct": 30.19,
+      "gmp_rupees": 128
+    },
+    {
+      "name": "Hero Motors",
+      "gmp_pct": 22.62,
+      "gmp_rupees": 19
+    },
+    {
+      "name": "Jindal Supreme",
+      "gmp_pct": 29.03,
+      "gmp_rupees": 27
+    },
+    {
+      "name": "Sonaselection India",
+      "gmp_pct": 8.08,
+      "gmp_rupees": 8
+    },
+    {
+      "name": "A-One Steels",
+      "gmp_pct": null,
+      "gmp_rupees": 0
     },
     {
       "name": "NSE",
