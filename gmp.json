@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "15 Sept, 16:48",
-  "generated_at": "2026-09-15T23:16:54Z",
+  "source_stamp": "16 Sept, 07:00",
+  "generated_at": "2026-09-16T02:09:18Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -11,8 +11,8 @@
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 38.13,
-      "gmp_rupees": 241
+      "gmp_pct": 30.38,
+      "gmp_rupees": 192
     },
     {
       "name": "Prasol Chemicals",
@@ -21,53 +21,53 @@
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 28.57,
-      "gmp_rupees": 52
+      "gmp_pct": 22.53,
+      "gmp_rupees": 41
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 39.6,
-      "gmp_rupees": 160
+      "gmp_pct": 33.42,
+      "gmp_rupees": 135
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 27.95,
-      "gmp_rupees": 71
+      "gmp_pct": 23.62,
+      "gmp_rupees": 60
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 43.84,
-      "gmp_rupees": 64
+      "gmp_pct": 36.99,
+      "gmp_rupees": 54
     },
     {
       "name": "Asset Reconstruction",
-      "gmp_pct": 12.23,
-      "gmp_rupees": 17
+      "gmp_pct": 10.79,
+      "gmp_rupees": 15
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": 0.29,
-      "gmp_rupees": 1
+      "gmp_pct": null,
+      "gmp_rupees": 0
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": 29.63,
-      "gmp_rupees": 24
-    },
-    {
-      "name": "Veegaland Developers",
-      "gmp_pct": 14.29,
+      "gmp_pct": 24.69,
       "gmp_rupees": 20
     },
     {
+      "name": "Veegaland Developers",
+      "gmp_pct": 7.14,
+      "gmp_rupees": 10
+    },
+    {
       "name": "Manika Plastech",
-      "gmp_pct": 25.58,
-      "gmp_rupees": 11
+      "gmp_pct": 6.98,
+      "gmp_rupees": 3
     },
     {
       "name": "NSE",
-      "gmp_pct": 11.65,
-      "gmp_rupees": 208
+      "gmp_pct": 8.96,
+      "gmp_rupees": 160
     }
   ]
 }
