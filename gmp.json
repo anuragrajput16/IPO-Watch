@@ -1,52 +1,52 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "16 Sept, 17:50",
-  "generated_at": "2026-09-17T02:13:03Z",
+  "source_stamp": "17 Sept, 12:00",
+  "generated_at": "2026-09-17T08:06:17Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
       "name": "Pranav Constructions",
-      "gmp_pct": 40.32,
-      "gmp_rupees": 50
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Kanohar Electricals",
-      "gmp_pct": 30.38,
-      "gmp_rupees": 192
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Prasol Chemicals",
       "gmp_pct": null,
-      "gmp_rupees": 0
+      "gmp_rupees": null
     },
     {
       "name": "Glass Wall Systems",
-      "gmp_pct": 22.53,
-      "gmp_rupees": 41
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 26.49,
-      "gmp_rupees": 107
+      "gmp_pct": 21.29,
+      "gmp_rupees": 86
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 15.75,
-      "gmp_rupees": 40
+      "gmp_pct": 18.9,
+      "gmp_rupees": 48
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 30.14,
-      "gmp_rupees": 44
+      "gmp_pct": 24.66,
+      "gmp_rupees": 36
     },
     {
       "name": "Asset Reconstruction",
-      "gmp_pct": 7.19,
-      "gmp_rupees": 10
+      "gmp_pct": 8.63,
+      "gmp_rupees": 12
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": null,
+      "gmp_pct": 0.0,
       "gmp_rupees": 0
     },
     {
@@ -56,13 +56,13 @@
     },
     {
       "name": "Veegaland Developers",
-      "gmp_pct": 4.29,
-      "gmp_rupees": 6
+      "gmp_pct": 3.57,
+      "gmp_rupees": 5
     },
     {
       "name": "Manika Plastech",
-      "gmp_pct": 11.63,
-      "gmp_rupees": 5
+      "gmp_pct": 4.65,
+      "gmp_rupees": 2
     },
     {
       "name": "SS Retail",
@@ -86,7 +86,7 @@
     },
     {
       "name": "A-One Steels",
-      "gmp_pct": null,
+      "gmp_pct": 0.0,
       "gmp_rupees": 0
     },
     {
