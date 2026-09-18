@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
   "source_stamp": "17 Sept, 16:18",
-  "generated_at": "2026-09-17T23:13:09Z",
+  "generated_at": "2026-09-18T01:59:44Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -26,38 +26,38 @@
     },
     {
       "name": "Rentomojo",
-      "gmp_pct": 21.29,
-      "gmp_rupees": 86
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Karamtara Engineering",
-      "gmp_pct": 18.9,
-      "gmp_rupees": 48
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "LCC Projects",
-      "gmp_pct": 24.66,
-      "gmp_rupees": 36
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Asset Reconstruction",
-      "gmp_pct": 8.63,
-      "gmp_rupees": 12
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Manipal Payment",
-      "gmp_pct": 0.0,
-      "gmp_rupees": 0
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Steamhouse India",
-      "gmp_pct": 19.75,
-      "gmp_rupees": 16
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Veegaland Developers",
-      "gmp_pct": 3.57,
-      "gmp_rupees": 5
+      "gmp_pct": 6.43,
+      "gmp_rupees": 9
     },
     {
       "name": "Manika Plastech",
@@ -66,13 +66,13 @@
     },
     {
       "name": "SS Retail",
-      "gmp_pct": 31.37,
-      "gmp_rupees": 133
+      "gmp_pct": 32.31,
+      "gmp_rupees": 137
     },
     {
       "name": "Hero Motors",
-      "gmp_pct": 8.33,
-      "gmp_rupees": 7
+      "gmp_pct": 7.14,
+      "gmp_rupees": 6
     },
     {
       "name": "Jindal Supreme",
@@ -81,8 +81,8 @@
     },
     {
       "name": "Sonaselection India",
-      "gmp_pct": 4.04,
-      "gmp_rupees": 4
+      "gmp_pct": 2.02,
+      "gmp_rupees": 2
     },
     {
       "name": "A-One Steels",
