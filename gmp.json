@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "19 Sept, 07:20",
-  "generated_at": "2026-09-19T07:37:19Z",
+  "source_stamp": "19 Sept, 17:10",
+  "generated_at": "2026-09-19T12:45:10Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -91,8 +91,8 @@
     },
     {
       "name": "NSE",
-      "gmp_pct": 6.22,
-      "gmp_rupees": 111
+      "gmp_pct": 5.04,
+      "gmp_rupees": 90
     }
   ]
 }
