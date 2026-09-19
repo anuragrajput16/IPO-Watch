@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "18 Sept, 18:24",
-  "generated_at": "2026-09-18T22:54:24Z",
+  "source_stamp": "19 Sept, 07:20",
+  "generated_at": "2026-09-19T02:04:16Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -56,8 +56,8 @@
     },
     {
       "name": "Veegaland Developers",
-      "gmp_pct": 6.43,
-      "gmp_rupees": 9
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Manika Plastech",
@@ -66,13 +66,13 @@
     },
     {
       "name": "SS Retail",
-      "gmp_pct": 32.31,
-      "gmp_rupees": 137
+      "gmp_pct": 34.2,
+      "gmp_rupees": 145
     },
     {
       "name": "Hero Motors",
-      "gmp_pct": 7.14,
-      "gmp_rupees": 6
+      "gmp_pct": null,
+      "gmp_rupees": 0
     },
     {
       "name": "Jindal Supreme",
@@ -86,13 +86,13 @@
     },
     {
       "name": "A-One Steels",
-      "gmp_pct": 13.58,
-      "gmp_rupees": 55
+      "gmp_pct": 14.81,
+      "gmp_rupees": 60
     },
     {
       "name": "NSE",
-      "gmp_pct": 8.29,
-      "gmp_rupees": 148
+      "gmp_pct": 6.22,
+      "gmp_rupees": 111
     }
   ]
 }
