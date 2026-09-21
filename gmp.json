@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "19 Sept, 17:10",
-  "generated_at": "2026-09-21T02:09:40Z",
+  "source_stamp": "21 Sept, 17:33",
+  "generated_at": "2026-09-21T15:26:32Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -66,8 +66,8 @@
     },
     {
       "name": "SS Retail",
-      "gmp_pct": 34.67,
-      "gmp_rupees": 147
+      "gmp_pct": 36.79,
+      "gmp_rupees": 156
     },
     {
       "name": "Hero Motors",
@@ -91,8 +91,8 @@
     },
     {
       "name": "NSE",
-      "gmp_pct": 2.69,
-      "gmp_rupees": 48
+      "gmp_pct": 3.42,
+      "gmp_rupees": 61
     }
   ]
 }
