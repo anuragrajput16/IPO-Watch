@@ -40,6 +40,16 @@ TRACKED = [
     # "one steels" rather than "a-one steels": the source writes the name both
     # hyphenated and spaced, and this matches either.
     ("A-One Steels",          "one steels"),
+    ("Adroit Industries",     "adroit industries"),
+    ("Orient Cables",         "orient cables"),
+    ("German Green Steel",    "german green steel"),
+    ("Swastika Infra",        "swastika infra"),
+    ("Moneyview",             "moneyview"),
+    ("Runwal Enterprises",    "runwal enterprises"),
+    ("ArMee Infotech",        "armee infotech"),
+    ("Elevate Campuses",      "elevate campuses"),
+    ("Varmora Granito",       "varmora granito"),
+    ("AceVector",             "acevector"),
     ("NSE",                   "nse"),  # exact-matched below, not substring
 ]
 
