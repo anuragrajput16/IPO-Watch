@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "22 Sept, 16:17",
-  "generated_at": "2026-09-23T02:14:55Z",
+  "source_stamp": "23 Sept, 07:50",
+  "generated_at": "2026-09-23T08:04:06Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -66,8 +66,8 @@
     },
     {
       "name": "SS Retail",
-      "gmp_pct": 33.02,
-      "gmp_rupees": 140
+      "gmp_pct": 37.74,
+      "gmp_rupees": 160
     },
     {
       "name": "Hero Motors",
@@ -86,13 +86,63 @@
     },
     {
       "name": "A-One Steels",
-      "gmp_pct": 14.81,
-      "gmp_rupees": 60
+      "gmp_pct": 12.35,
+      "gmp_rupees": 50
+    },
+    {
+      "name": "Adroit Industries",
+      "gmp_pct": 25.37,
+      "gmp_rupees": 34
+    },
+    {
+      "name": "Orient Cables",
+      "gmp_pct": 12.5,
+      "gmp_rupees": 34
+    },
+    {
+      "name": "German Green Steel",
+      "gmp_pct": 10.79,
+      "gmp_rupees": 15
+    },
+    {
+      "name": "Swastika Infra",
+      "gmp_pct": 4.32,
+      "gmp_rupees": 8
+    },
+    {
+      "name": "Moneyview",
+      "gmp_pct": 32.35,
+      "gmp_rupees": 11
+    },
+    {
+      "name": "Runwal Enterprises",
+      "gmp_pct": 5.9,
+      "gmp_rupees": 18
+    },
+    {
+      "name": "ArMee Infotech",
+      "gmp_pct": 12.27,
+      "gmp_rupees": 46
+    },
+    {
+      "name": "Elevate Campuses",
+      "gmp_pct": 1.38,
+      "gmp_rupees": 5
+    },
+    {
+      "name": "Varmora Granito",
+      "gmp_pct": 3.38,
+      "gmp_rupees": 5
+    },
+    {
+      "name": "AceVector",
+      "gmp_pct": null,
+      "gmp_rupees": 0
     },
     {
       "name": "NSE",
-      "gmp_pct": 3.64,
-      "gmp_rupees": 65
+      "gmp_pct": 2.41,
+      "gmp_rupees": 43
     }
   ]
 }
