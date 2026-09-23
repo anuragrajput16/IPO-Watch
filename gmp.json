@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": "23 Sept, 07:50",
-  "generated_at": "2026-09-23T08:04:06Z",
+  "source_stamp": "23 Sept, 14:30",
+  "generated_at": "2026-09-23T13:56:24Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -66,18 +66,18 @@
     },
     {
       "name": "SS Retail",
-      "gmp_pct": 37.74,
-      "gmp_rupees": 160
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Hero Motors",
-      "gmp_pct": 0.0,
-      "gmp_rupees": 0
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Jindal Supreme",
-      "gmp_pct": 32.26,
-      "gmp_rupees": 30
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Sonaselection India",
@@ -121,28 +121,28 @@
     },
     {
       "name": "ArMee Infotech",
-      "gmp_pct": 12.27,
-      "gmp_rupees": 46
+      "gmp_pct": 14.66,
+      "gmp_rupees": 55
     },
     {
       "name": "Elevate Campuses",
-      "gmp_pct": 1.38,
-      "gmp_rupees": 5
+      "gmp_pct": 0.83,
+      "gmp_rupees": 3
     },
     {
       "name": "Varmora Granito",
-      "gmp_pct": 3.38,
-      "gmp_rupees": 5
+      "gmp_pct": 0.0,
+      "gmp_rupees": 0
     },
     {
       "name": "AceVector",
-      "gmp_pct": null,
+      "gmp_pct": 0.0,
       "gmp_rupees": 0
     },
     {
       "name": "NSE",
-      "gmp_pct": 2.41,
-      "gmp_rupees": 43
+      "gmp_pct": 5.04,
+      "gmp_rupees": 90
     }
   ]
 }
