@@ -434,7 +434,7 @@
   <p><b>Live GMP:</b> figures are pulled from a <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">gmp.json</code> file that a scheduled job refreshes every few hours, sourced from ipowatch.in.
   Press <b>Refresh GMP</b> to re-read the latest. Open this page from your GitHub Pages URL (not the local file) for live data.</p>
   <p><b>Everything stays on this device.</b> Names, PANs and contribution amounts live in your browser’s localStorage only — nothing is uploaded. Clearing site data wipes them.</p>
-  <p><b>An asterisk (*)</b> on a figure — e.g. A-One Steels' <code style="background:#EEF0F4;padding:1px 5px;border-radius:4px">35%*</code> quota — means indicative, not yet confirmed in the offer document.</p>
+  <p><b>An asterisk (*)</b> on a figure means indicative, not yet confirmed in the offer document.</p>
   <p><b>GMP is unofficial</b> grey-market data — a rough sentiment signal, not a forecast, and sources disagree. Default contribution is 1 lot at the upper band (cut-off). None of this is financial advice.</p>
 </footer>
 
@@ -444,35 +444,35 @@ const GMP_URL = "gmp.json";
 const DEFAULTS = [
   // rank = my running order across the live windows (0 = past/unranked).
   // f Fundamentals · v Valuation · lt Long-term · l Listing potential (-1 = not rated yet).
-  {b:"7–9 Sep",   n:"Pranav Constructions",  rank:0, gmp:"29%",    rup:36,   band:"₹118–124",     app:14880, quota:"45%",  f:4,   v:4,  lt:-1,  l:5, view:"Apply",           vc:"go"},
-  {b:"8–10 Sep",  n:"Kanohar Electricals",   rank:0, gmp:"30%",    rup:190,  band:"₹601–632",     app:14536, quota:"35%",  f:5,   v:3,  lt:-1,  l:5, view:"Apply",           vc:"go"},
-  {b:"8–10 Sep",  n:"Prasol Chemicals",      rank:0, gmp:"16%",    rup:110,  band:"₹643–676",     app:14872, quota:"35%",  f:4,   v:3,  lt:-1,  l:4, view:"Cautious Apply",  vc:"wait"},
-  {b:"8–10 Sep",  n:"Glass Wall Systems",    rank:0, gmp:"18%",    rup:32,   band:"₹172–182",     app:14924, quota:"35%",  f:4,   v:2,  lt:-1,  l:3, view:"Skip",            vc:"wait"},
-  {b:"9–11 Sep",  n:"Rentomojo",             rank:0, gmp:"35%",    rup:140,  band:"₹384–404",     app:14948, quota:"10%",  f:5,   v:3,  lt:-1,  l:5, view:"Apply",           vc:"go"},
-  {b:"9–11 Sep",  n:"Karamtara Engineering", rank:0, gmp:"20%",    rup:50,   band:"₹241–254",     app:14986, quota:"35%",  f:5,   v:4,  lt:-1,  l:4, view:"Strong Apply",    vc:"go"},
-  {b:"9–11 Sep",  n:"LCC Projects",          rank:0, gmp:"15%",    rup:22,   band:"₹139–146",     app:14892, quota:"35%",  f:5,   v:4,  lt:-1,  l:4, view:"Apply",           vc:"go"},
-  {b:"9–11 Sep",  n:"Asset Reconstruction",  rank:0, gmp:"TBD",    rup:null, band:"₹132–139",     app:14873, quota:"35%",  f:5,   v:4,  lt:-1,  l:2, view:"Long-term",       vc:"wait"},
-  {b:"9–11 Sep",  n:"Manipal Payment",       rank:0, gmp:"7%",     rup:25,   band:"₹322–339",     app:14916, quota:"35%",  f:-1,  v:-1, lt:-1,  l:3, view:"Wait",            vc:"wait"},
-  {b:"9–11 Sep",  n:"Steamhouse India",      rank:0, gmp:"TBD",    rup:null, band:"₹77–81",       app:14900, quota:"35%",  f:3,   v:-1, lt:-1,  l:2, view:"Skip",            vc:"stop"},
-  {b:"10–15 Sep", n:"Veegaland Developers",  rank:0, gmp:"14.29%", rup:20,   band:"₹130–140",     app:14980, quota:"35%",  f:4,   v:3,  lt:4,   l:3, view:"Watch",           vc:"wait"},
-  {b:"11–16 Sep", n:"Manika Plastech",       rank:0, gmp:"25.58%", rup:11,   band:"₹40–43",       app:14964, quota:"35%",  f:3.5, v:4,  lt:3.5, l:4, view:"Selective",       vc:"wait"},
-  {b:"16–18 Sep", n:"SS Retail",             rank:0, gmp:"33.02%", rup:140,  band:"₹403–424",     app:14840, quota:"35%",  f:4,   v:3,  lt:4,   l:5, view:"Apply",           vc:"go"},
-  {b:"16–18 Sep", n:"Hero Motors",           rank:0, gmp:"28.57%", rup:24,   band:"₹79–84",       app:14952, quota:"35%",  f:4,   v:4,  lt:4,   l:5, view:"Apply",           vc:"go"},
-  {b:"16–18 Sep", n:"Jindal Supreme",        rank:0, gmp:"29.03%", rup:27,   band:"₹88–93",       app:14973, quota:"35%",  f:3.5, v:4,  lt:3.5, l:5, view:"Selective Apply", vc:"go"},
-  {b:"17–21 Sep", n:"NSE",                   rank:0, gmp:"11.65%", rup:208,  band:"₹1,700–1,785", app:14280, quota:"35%",  f:5,   v:4,  lt:5,   l:4, view:"Strong Apply",    vc:"go"},
-  {b:"17–21 Sep", n:"Sonaselection India",   rank:0, gmp:"0%",     rup:0,    band:"₹94–99",       app:14850, quota:"35%",  f:4,   v:3,  lt:3.5, l:2, view:"Wait",            vc:"wait"},
-  {b:"24–28 Sep", n:"A-One Steels",          rank:5, gmp:"12.35%", rup:50,   band:"₹405",         app:14985, quota:"35%*", f:4,   v:3.5,lt:3.5, l:4, view:"Selective Apply", vc:"go"},
+  {b:"7–9 Sep",   n:"Pranav Constructions",  rank:0, gmp:"29%",    rup:36,   band:"₹118–124",     app:14880, quota:"45%",    f:4,   v:4,  lt:-1,  l:5, view:"Apply",           vc:"go"},
+  {b:"8–10 Sep",  n:"Kanohar Electricals",   rank:0, gmp:"30%",    rup:190,  band:"₹601–632",     app:14536, quota:"35%",    f:5,   v:3,  lt:-1,  l:5, view:"Apply",           vc:"go"},
+  {b:"8–10 Sep",  n:"Prasol Chemicals",      rank:0, gmp:"16%",    rup:110,  band:"₹643–676",     app:14872, quota:"35%",    f:4,   v:3,  lt:-1,  l:4, view:"Cautious Apply",  vc:"wait"},
+  {b:"8–10 Sep",  n:"Glass Wall Systems",    rank:0, gmp:"18%",    rup:32,   band:"₹172–182",     app:14924, quota:"35%",    f:4,   v:2,  lt:-1,  l:3, view:"Skip",            vc:"wait"},
+  {b:"9–11 Sep",  n:"Rentomojo",             rank:0, gmp:"35%",    rup:140,  band:"₹384–404",     app:14948, quota:"10%",    f:5,   v:3,  lt:-1,  l:5, view:"Apply",           vc:"go"},
+  {b:"9–11 Sep",  n:"Karamtara Engineering", rank:0, gmp:"20%",    rup:50,   band:"₹241–254",     app:14986, quota:"35%",    f:5,   v:4,  lt:-1,  l:4, view:"Strong Apply",    vc:"go"},
+  {b:"9–11 Sep",  n:"LCC Projects",          rank:0, gmp:"15%",    rup:22,   band:"₹139–146",     app:14892, quota:"35%",    f:5,   v:4,  lt:-1,  l:4, view:"Apply",           vc:"go"},
+  {b:"9–11 Sep",  n:"Asset Reconstruction",  rank:0, gmp:"TBD",    rup:null, band:"₹132–139",     app:14873, quota:"35%",    f:5,   v:4,  lt:-1,  l:2, view:"Long-term",       vc:"wait"},
+  {b:"9–11 Sep",  n:"Manipal Payment",       rank:0, gmp:"7%",     rup:25,   band:"₹322–339",     app:14916, quota:"35%",    f:-1,  v:-1, lt:-1,  l:3, view:"Wait",            vc:"wait"},
+  {b:"9–11 Sep",  n:"Steamhouse India",      rank:0, gmp:"TBD",    rup:null, band:"₹77–81",       app:14900, quota:"35%",    f:3,   v:-1, lt:-1,  l:2, view:"Skip",            vc:"stop"},
+  {b:"10–15 Sep", n:"Veegaland Developers",  rank:0, gmp:"14.29%", rup:20,   band:"₹130–140",     app:14980, quota:"35%",    f:4,   v:3,  lt:4,   l:3, view:"Watch",           vc:"wait"},
+  {b:"11–16 Sep", n:"Manika Plastech",       rank:0, gmp:"25.58%", rup:11,   band:"₹40–43",       app:14964, quota:"35%",    f:3.5, v:4,  lt:3.5, l:4, view:"Selective",       vc:"wait"},
+  {b:"16–18 Sep", n:"SS Retail",             rank:0, gmp:"33.02%", rup:140,  band:"₹403–424",     app:14840, quota:"35%",    f:4,   v:3,  lt:4,   l:5, view:"Apply",           vc:"go"},
+  {b:"16–18 Sep", n:"Hero Motors",           rank:0, gmp:"28.57%", rup:24,   band:"₹79–84",       app:14952, quota:"35%",    f:4,   v:4,  lt:4,   l:5, view:"Apply",           vc:"go"},
+  {b:"16–18 Sep", n:"Jindal Supreme",        rank:0, gmp:"29.03%", rup:27,   band:"₹88–93",       app:14973, quota:"35%",    f:3.5, v:4,  lt:3.5, l:5, view:"Selective Apply", vc:"go"},
+  {b:"17–21 Sep", n:"NSE",                   rank:0, gmp:"11.65%", rup:208,  band:"₹1,700–1,785", app:14280, quota:"35%",    f:5,   v:4,  lt:5,   l:4, view:"Strong Apply",    vc:"go"},
+  {b:"17–21 Sep", n:"Sonaselection India",   rank:0, gmp:"0%",     rup:0,    band:"₹94–99",       app:14850, quota:"35%",    f:4,   v:3,  lt:3.5, l:2, view:"Wait",            vc:"wait"},
+  {b:"24–28 Sep", n:"A-One Steels",          rank:5, gmp:"12.35%", rup:50,   band:"₹405",         app:14985, quota:"34.83%", f:4,   v:3.5,lt:3.5, l:4, view:"Selective Apply", vc:"go"},
   // 22–29 Sep windows. Only the upper band is known so far: it's est. listing − GMP.
-  {b:"23–25 Sep", n:"Adroit Industries",     rank:1, gmp:"25.37%", rup:34,   band:"₹134",         app:14874, quota:"—",    f:5,   v:4,  lt:4.5, l:5, view:"Apply",           vc:"go"},
-  {b:"25–29 Sep", n:"Orient Cables",         rank:2, gmp:"12.5%",  rup:34,   band:"₹272",         app:14960, quota:"—",    f:5,   v:4,  lt:4.5, l:4, view:"Apply",           vc:"go"},
-  {b:"25–29 Sep", n:"German Green Steel",    rank:3, gmp:"10.79%", rup:15,   band:"₹139",         app:14873, quota:"—",    f:4.5, v:5,  lt:4,   l:4, view:"Apply",           vc:"go"},
-  {b:"23–25 Sep", n:"Swastika Infra",        rank:4, gmp:"4.32%",  rup:8,    band:"₹185",         app:14800, quota:"—",    f:4.5, v:5,  lt:4,   l:3, view:"Apply",           vc:"go"},
-  {b:"24–28 Sep", n:"Moneyview",             rank:6, gmp:"32.35%", rup:11,   band:"₹34",          app:14994, quota:"—",    f:4,   v:4,  lt:4,   l:5, view:"Apply",           vc:"go"},
-  {b:"25–29 Sep", n:"Runwal Enterprises",    rank:7, gmp:"5.9%",   rup:18,   band:"₹305",         app:14945, quota:"—",    f:4,   v:4,  lt:3.5, l:4, view:"Selective",       vc:"wait"},
-  {b:"23–25 Sep", n:"ArMee Infotech",        rank:8, gmp:"12.27%", rup:46,   band:"₹375",         app:15000, quota:"—",    f:3.5, v:4,  lt:3.5, l:5, view:"Selective",       vc:"wait"},
-  {b:"23–25 Sep", n:"Elevate Campuses",      rank:9, gmp:"1.38%",  rup:5,    band:"₹362",         app:14842, quota:"—",    f:3.5, v:3,  lt:3.5, l:2, view:"Skip",            vc:"stop"},
-  {b:"22–24 Sep", n:"Varmora Granito",       rank:10,gmp:"2.7%",   rup:"3–5",band:"₹148",         app:14948, quota:"—",    f:3,   v:2,  lt:3,   l:2.5,view:"Skip",            vc:"stop"},
-  {b:"25–29 Sep", n:"AceVector",             rank:11,gmp:"0%",     rup:0,    band:"TBD",          app:14976, quota:"—",    f:3,   v:3,  lt:3,   l:2, view:"Skip",            vc:"stop"},
+  {b:"23–25 Sep", n:"Adroit Industries",     rank:1, gmp:"25.37%", rup:34,   band:"₹134",         app:14874, quota:"35%",    f:5,   v:4,  lt:4.5, l:5, view:"Apply",           vc:"go"},
+  {b:"25–29 Sep", n:"Orient Cables",         rank:2, gmp:"12.5%",  rup:34,   band:"₹272",         app:14960, quota:"35%",    f:5,   v:4,  lt:4.5, l:4, view:"Apply",           vc:"go"},
+  {b:"25–29 Sep", n:"German Green Steel",    rank:3, gmp:"10.79%", rup:15,   band:"₹139",         app:14873, quota:"35%",    f:4.5, v:5,  lt:4,   l:4, view:"Apply",           vc:"go"},
+  {b:"23–25 Sep", n:"Swastika Infra",        rank:4, gmp:"4.32%",  rup:8,    band:"₹185",         app:14985, quota:"35%",    f:4.5, v:5,  lt:4,   l:3, view:"Apply",           vc:"go"},
+  {b:"24–28 Sep", n:"Moneyview",             rank:6, gmp:"32.35%", rup:11,   band:"₹34",          app:14994, quota:"35%",    f:4,   v:4,  lt:4,   l:5, view:"Apply",           vc:"go"},
+  {b:"25–29 Sep", n:"Runwal Enterprises",    rank:7, gmp:"5.9%",   rup:18,   band:"₹305",         app:14945, quota:"34.76%", f:4,   v:4,  lt:3.5, l:4, view:"Selective",       vc:"wait"},
+  {b:"23–25 Sep", n:"ArMee Infotech",        rank:8, gmp:"12.27%", rup:46,   band:"₹375",         app:15000, quota:"52.5%",  f:3.5, v:4,  lt:3.5, l:5, view:"Selective",       vc:"wait"},
+  {b:"23–25 Sep", n:"Elevate Campuses",      rank:9, gmp:"1.38%",  rup:5,    band:"₹362",         app:14842, quota:"10%",    f:3.5, v:3,  lt:3.5, l:2, view:"Skip",            vc:"stop"},
+  {b:"22–24 Sep", n:"Varmora Granito",       rank:10,gmp:"2.7%",   rup:"3–5",band:"₹148",         app:14948, quota:"35%",    f:3,   v:2,  lt:3,   l:2.5,view:"Skip",            vc:"stop"},
+  {b:"25–29 Sep", n:"AceVector",             rank:11,gmp:"0%",     rup:0,    band:"TBD",          app:14976, quota:"10%",    f:3,   v:3,  lt:3,   l:2, view:"Skip",            vc:"stop"},
 ];
 
 // Registrar handling each IPO's allotment — from each company's IPO detail
