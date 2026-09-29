@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
   "source_stamp": null,
-  "generated_at": "2026-09-29T09:12:47Z",
+  "generated_at": "2026-09-29T17:11:32Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -86,8 +86,8 @@
     },
     {
       "name": "A-One Steels",
-      "gmp_pct": 7.4,
-      "gmp_rupees": 30
+      "gmp_pct": 6.17,
+      "gmp_rupees": 25
     },
     {
       "name": "Adroit Industries",
@@ -96,13 +96,13 @@
     },
     {
       "name": "Orient Cables",
-      "gmp_pct": 26.47,
-      "gmp_rupees": 72
+      "gmp_pct": 31.25,
+      "gmp_rupees": 85
     },
     {
       "name": "German Green Steel",
-      "gmp_pct": 17.98,
-      "gmp_rupees": 25
+      "gmp_pct": 7.19,
+      "gmp_rupees": 10
     },
     {
       "name": "Swastika Infra",
@@ -111,8 +111,8 @@
     },
     {
       "name": "Moneyview",
-      "gmp_pct": 41.18,
-      "gmp_rupees": 14
+      "gmp_pct": 38.23,
+      "gmp_rupees": 13
     },
     {
       "name": "Runwal Enterprises",
@@ -131,8 +131,8 @@
     },
     {
       "name": "Varmora Granito",
-      "gmp_pct": 0.68,
-      "gmp_rupees": 1
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "AceVector",
