@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
   "source_stamp": null,
-  "generated_at": "2026-09-29T21:36:44Z",
+  "generated_at": "2026-09-30T02:49:01Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -86,8 +86,8 @@
     },
     {
       "name": "A-One Steels",
-      "gmp_pct": 6.17,
-      "gmp_rupees": 25
+      "gmp_pct": 8.64,
+      "gmp_rupees": 35
     },
     {
       "name": "Adroit Industries",
@@ -101,13 +101,13 @@
     },
     {
       "name": "German Green Steel",
-      "gmp_pct": 7.19,
-      "gmp_rupees": 10
+      "gmp_pct": 9.35,
+      "gmp_rupees": 13
     },
     {
       "name": "Swastika Infra",
-      "gmp_pct": 3.24,
-      "gmp_rupees": 6
+      "gmp_pct": 3.78,
+      "gmp_rupees": 7
     },
     {
       "name": "Moneyview",
@@ -116,8 +116,8 @@
     },
     {
       "name": "Runwal Enterprises",
-      "gmp_pct": 4.59,
-      "gmp_rupees": 14
+      "gmp_pct": 0.66,
+      "gmp_rupees": 2
     },
     {
       "name": "ArMee Infotech",
@@ -126,8 +126,8 @@
     },
     {
       "name": "Elevate Campuses",
-      "gmp_pct": 1.66,
-      "gmp_rupees": 6
+      "gmp_pct": 1.8,
+      "gmp_rupees": 7
     },
     {
       "name": "Varmora Granito",
