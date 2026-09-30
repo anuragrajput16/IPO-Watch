@@ -1,7 +1,7 @@
 {
   "source": "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/",
-  "source_stamp": null,
-  "generated_at": "2026-09-30T09:06:32Z",
+  "source_stamp": "30 Sep, 16:00",
+  "generated_at": "2026-09-30T17:09:37Z",
   "note": "GMP is unofficial grey-market data, for reference only.",
   "items": [
     {
@@ -91,8 +91,8 @@
     },
     {
       "name": "Adroit Industries",
-      "gmp_pct": 43.28,
-      "gmp_rupees": 58
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Orient Cables",
@@ -106,8 +106,8 @@
     },
     {
       "name": "Swastika Infra",
-      "gmp_pct": 3.78,
-      "gmp_rupees": 7
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Moneyview",
@@ -121,13 +121,13 @@
     },
     {
       "name": "ArMee Infotech",
-      "gmp_pct": 1.6,
-      "gmp_rupees": 6
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Elevate Campuses",
-      "gmp_pct": 1.8,
-      "gmp_rupees": 7
+      "gmp_pct": null,
+      "gmp_rupees": null
     },
     {
       "name": "Varmora Granito",
